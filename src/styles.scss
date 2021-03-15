@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+@font-face {
+  font-family: "Playball-Regular";
+  src: url("./assets/fonts/Playball-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.home-wrapper,
+.dealers {
+  padding: 100px 0 0 135px; //paddint-top: 85px;
+}
+// cars component
+.filter-toggle {
+  padding: 85px 20px 0 105px;
+  margin-bottom: 20px;
+}

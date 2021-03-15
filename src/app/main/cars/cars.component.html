@@ -1,1 +1,108 @@
-<p>cars works!</p>
+<!-- If toggle === true -->
+<div class="filter-toggle">
+  <!-- <form class="search-form" *ngIf="!toggleStatus">
+    <mat-form-field class="filter-field">
+      <mat-label>Filter by car brand</mat-label>
+      <input matInput placeholder="Ex. Ford" value="" />
+    </mat-form-field>
+  </form> -->
+  <app-cars-filter *ngIf="!toggleStatus"></app-cars-filter>
+  <div>
+    <mat-list role="list" *ngIf="toggleStatus">
+      <mat-list-item
+        class="category"
+        role="listitem"
+        *ngFor="let category of carsCategory"
+        (click)="getCarsOnCategory(category)"
+        >{{
+          category.charAt(0).toUpperCase() + category.slice(1)
+        }}</mat-list-item
+      >
+    </mat-list>
+  </div>
+  <div class="toggle">
+    <mat-slide-toggle (click)="changeToggleStatus(!toggleStatus)"
+      >View By Category</mat-slide-toggle
+    >
+  </div>
+</div>
+<section class="cars-by-category" *ngIf="toggleStatus">
+  <div class="cars-list" *ngIf="toggleStatus && selectedCarsOnCategory">
+    <mat-selection-list #cars [multiple]="false" id="selectedCars">
+      <!--[value]="car" -->
+      <mat-list-option
+        *ngFor="let car of selectedCarsOnCategory"
+        (click)="selectCar(car)"
+      >
+        <h3>{{ car.model }}</h3>
+        <p>{{ car.brand }}</p>
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+  <div class="selected-car" *ngIf="selectedCar">
+    <img
+      class="selected-car-img"
+      src="{{ selectedCar.image }}"
+      alt="selected-car-img"
+    />
+  </div>
+  <div class="selected-car-info" *ngIf="selectedCar">
+    <h3>{{ selectedCar.model }}</h3>
+    <ul class="car-properties">
+      <li>
+        Dealers: <span>{{ selectedCar.brand }}</span>
+      </li>
+      <li>
+        Class: <span>{{ selectedCar.class }}</span>
+      </li>
+      <li>
+        Year: <span>{{ selectedCar.year }}</span>
+      </li>
+      <li>
+        Color: <span>{{ selectedCar.color }}</span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- If toggle === false -->
+<section class="cars" *ngIf="!toggleStatus">
+  <mat-card class="card" *ngFor="let car of !loadMore ? trimmedCars : cars">
+    <mat-card-header class="card-header">
+      <mat-card-title>{{ car.model }}</mat-card-title>
+      <mat-card-subtitle>{{ car.brand }}</mat-card-subtitle>
+      <button
+        *ngIf="car.liked"
+        mat-icon-button
+        color="warn"
+        aria-label="heart icon"
+        (click)="likeCar(car)"
+      >
+        <mat-icon>favorite</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+      <img
+        class="card-content-img"
+        mat-card-image
+        src="{{ car.image }}"
+        alt="{{ 'Photo of a' + car.model }}"
+      />
+    </mat-card-content>
+    <mat-card-actions class="card-actions">
+      <a class="card-actions-link like" (click)="likeCar(car)">{{
+        !car.liked ? "Like" : "Dislake"
+      }}</a>
+      <a class="card-actions-link details">Details</a>
+    </mat-card-actions>
+  </mat-card>
+</section>
+<div class="load-more" *ngIf="!toggleStatus">
+  <button
+    class="load-more-btn"
+    mat-raised-button
+    color="accent"
+    (click)="loadMore = !loadMore"
+  >
+    {{ !loadMore ? "Load More" : "Roll up" }}
+  </button>
+</div>

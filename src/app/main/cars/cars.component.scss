@@ -1,0 +1,128 @@
+// If View cars by category (toggle) === false
+.cars {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .card {
+    max-width: 20%;
+    margin-bottom: 40px;
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    button {
+      margin-top: -10px;
+    }
+  }
+  .card-content-img {
+    height: 150px;
+    object-fit: cover;
+  }
+  .card-actions {
+    margin: 0 0 4px 4px;
+    .card-actions-link {
+      transition: all 0.1s ease-in-out;
+    }
+    .card-actions-link:hover {
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .card-actions-link + .card-actions-link {
+      margin-left: 30px;
+    }
+    .like {
+      color: #563b98;
+    }
+    .details {
+      color: #ffd765;
+    }
+  }
+}
+
+.load-more {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  .load-more-btn {
+    margin-bottom: 20px;
+  }
+}
+
+// If View cars by category (toggle) === true
+.filter-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle {
+  color: grey;
+}
+
+.cars-by-category {
+  display: flex;
+  div + div {
+    margin-left: 15px;
+  }
+}
+
+.cars-list {
+  width: 350px;
+  padding-left: 105px;
+}
+
+.mat-list-base {
+  display: flex;
+}
+
+.mat-list-item {
+  color: grey;
+  cursor: pointer;
+  border-bottom: 2px solid #dbdbdb;
+}
+
+.mat-list-item:hover {
+  background-color: lightgray;
+  border-bottom: 2px solid #563b98;
+}
+
+#selectedCars {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  .mat-list-option {
+    border: none;
+    color: #000;
+    h3 {
+      font-weight: bold;
+    }
+  }
+}
+
+.selected-car {
+  width: 800px;
+  .selected-car-img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+}
+
+.selected-car-info {
+  .car-properties {
+    list-style-type: none;
+    padding: 0;
+    li + li {
+      margin-top: 15px;
+    }
+    li {
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+}
