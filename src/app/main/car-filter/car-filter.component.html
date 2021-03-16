@@ -10,10 +10,23 @@
       </li>
     </ul>
   </div> -->
-  <!-- *ngIf="!toggleStatus" -->
-  <form class="search-form">
-    <mat-form-field class="filter-field">
-      <mat-label>Filter by car brand</mat-label>
-      <input matInput #filterInput placeholder="Ex. Ford" value="" (input)="search(filterInput.value)" />
-    </mat-form-field>
-  </form>
+<!-- *ngIf="!toggleStatus" -->
+<form class="search-form">
+  <mat-form-field class="filter-field">
+    <mat-label>Filter by car brand</mat-label>
+    <input
+      matInput
+      #filterInput
+      placeholder="Ex. Ford"
+      value=""
+      (input)="search(filterInput.value)"
+    />
+    <ul class="search-result">
+      <li *ngFor="let car of cars$ | async">
+        <span>
+          {{ car.model }}
+        </span>
+      </li>
+    </ul>
+  </mat-form-field>
+</form>

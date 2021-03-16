@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  public id: number;
+  id: number;
   private routeSubscription: Subscription;
 
   constructor(private route: ActivatedRoute) {

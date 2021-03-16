@@ -14,7 +14,7 @@ export class CarsService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  public constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {}
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
@@ -33,7 +33,7 @@ export class CarsService {
     console.log(message);
   }
 
-  public getCars(): Observable<ICar[]> {
+    getCars(): Observable<ICar[]> {
     return this.http.get<ICar[]>(this.carsUrl).pipe(
       tap((_) => this.log('fetched cars')),
       catchError(this.handleError<ICar[]>('getCars', []))
@@ -41,8 +41,7 @@ export class CarsService {
   }
 
   /** PUT: update the car on the server */
-  public updateCar(car: ICar): Observable<any> {
-    console.log('car: ', car);
+    updateCar(car: ICar): Observable<any> {
     return this.http.put(this.carsUrl, car, this.httpOptions).pipe(
       tap((_) => this.log(`update car id=${car.id}`)),
       catchError(this.handleError<any>('updateCar'))
@@ -50,11 +49,12 @@ export class CarsService {
   }
 
   /* GET cars whose brand contains search term */
-  public searchCars(term: string): Observable<ICar[]> {
+    searchCars(term: string): Observable<ICar[]> {
     if (!term.trim()) {
       // if not search term, return empty car array.
       return of([]);
     }
+    // const queryString: string = this.carsUrl + term;
     return this.http.get<ICar[]>(`${this.carsUrl}/?brand=${term}`).pipe(
       tap((x) =>
         x.length

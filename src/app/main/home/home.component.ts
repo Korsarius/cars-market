@@ -9,21 +9,21 @@ import { CarsService } from './../cars/cars.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  public cars: ICar[] | null = new Array<ICar>();
+    cars: ICar[] | null = new Array<ICar>();
 
   constructor(private carService: CarsService) {}
 
-  public ngOnInit(): void {
+    ngOnInit(): void {
     this.getCars();
   }
 
-  public getCars(): void {
-    this.carService.getCars().subscribe((cars) => {
-      cars.map((car) => (car.liked ? this.cars.push(car) : ''));
-    });
+    getCars(): void {
+    this.carService
+      .getCars()
+      .subscribe((cars) => (this.cars = cars.filter((car) => car.liked)));
   }
 
-  public dislikeCar(car: ICar): void {
+    dislikeCar(car: ICar): void {
     car.liked = !car.liked;
     this.carService.updateCar(car).subscribe();
   }

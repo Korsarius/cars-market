@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
 
@@ -13,16 +13,21 @@ import { CarsService } from '../cars/cars.service';
   styleUrls: ['./car-filter.component.scss'],
 })
 export class CarFilterComponent implements OnInit {
-  public cars$?: Observable<ICar[]>;
+  cars$?: Observable<ICar[]>;
   private searchTerms: Subject<string> = new Subject<string>();
+  @Output()   filteredCar: EventEmitter<ICar> = new EventEmitter<ICar>();
 
-  public constructor(private carService: CarsService) {}
+    constructor(private carService: CarsService) {}
 
-  public search(term: string): void {
+    search(term: string): void {
     this.searchTerms.next(term);
   }
 
-  public ngOnInit(): void {
+    addNewItem(car: ICar): void {
+    this.filteredCar.emit(car);
+  }
+
+    ngOnInit(): void {
     this.cars$ = this.searchTerms.pipe(
       // wait 300ms after each keystroke before considering the term
       debounceTime(300),

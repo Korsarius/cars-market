@@ -6,7 +6,7 @@ import { CARS } from '../../../assets/data/data.constants';
   providedIn: 'root',
 })
 export class InMemoryDataService implements InMemoryDbService {
-  public createDb(): {} {
+    createDb(): {} {
     const cars = CARS;
     return { cars };
   }

@@ -2,9 +2,9 @@ export interface ICar {
   id: string;
   brand: string;
   model: string;
-  year: number;
+  year?: number;
   color: string;
-  class: string;
+  class?: string;
   category: string;
   image: string;
   liked: boolean;

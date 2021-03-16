@@ -6,9 +6,10 @@
       <input matInput placeholder="Ex. Ford" value="" />
     </mat-form-field>
   </form> -->
+  <!-- (filteredCar)="addItem($event)" -->
   <app-cars-filter *ngIf="!toggleStatus"></app-cars-filter>
   <div>
-    <mat-list role="list" *ngIf="toggleStatus">
+    <mat-list role="list" *ngIf="toggleStatus"> 
       <mat-list-item
         class="category"
         role="listitem"
@@ -65,6 +66,13 @@
   </div>
 </section>
 <!-- If toggle === false -->
+<!-- <ul class="search-result">
+  <li *ngFor="let car of cars$ | async" >
+    <a routerLink="/detail/{{hero.id}}">
+      {{car.model}}
+    </a>
+  </li>
+</ul> -->
 <section class="cars" *ngIf="!toggleStatus">
   <mat-card class="card" *ngFor="let car of !loadMore ? trimmedCars : cars">
     <mat-card-header class="card-header">

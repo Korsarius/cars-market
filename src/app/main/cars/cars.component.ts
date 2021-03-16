@@ -9,52 +9,58 @@ import { CarsService } from './cars.service';
   styleUrls: ['./cars.component.scss'],
 })
 export class CarsComponent implements OnInit {
-  public cars: ICar[] = new Array<ICar>();
-  public trimmedCars: ICar[] = new Array<ICar>();
-  @Input() public car?: ICar;
-  public loadMore: boolean = false;
-  public toggleStatus: boolean = false;
-  public carsCategory: Set<string> = new Set();
-  public selectedCarsOnCategory: ICar[] = new Array<ICar>();
-  public selectedCar: ICar;
+    cars: ICar[] = new Array<ICar>();
+    trimmedCars: ICar[] = new Array<ICar>();
+  @Input()   car?: ICar;
+    loadMore: boolean = false;
+    toggleStatus: boolean = false;
+    carsCategory: Set<string> = new Set();
+    selectedCarsOnCategory: ICar[] = new Array<ICar>();
+    selectedCar: ICar;
+
+    foundCars: ICar[] = new Array<ICar>();
 
   constructor(private carService: CarsService) {}
 
-  public ngOnInit(): void {
+    ngOnInit(): void {
     this.getCars();
   }
 
-  public getCars(): void {
+  //   addItem(newCar: ICar): void {
+  //   this.foundCars.push(newCar);
+  //   console.log('this.foundCars: ', this.foundCars);
+  //   this.cars.push(newCar);
+  //   console.log('this.cars: ', this.cars);
+  // }
+
+    getCars(): void {
     this.carService.getCars().subscribe((cars) => {
       this.cars = cars;
-      this.trimmedCars = this.cars.slice(0, 8);
-      this.cars.forEach((item) => {
-        if (!item.category) {
-          this.carsCategory.add('Other');
-          return;
-        }
-        this.carsCategory.add(item.category);
-      });
+      this.trimmedCars = this.cars.slice(0, 8); // сделать по 8
+      this.cars.forEach((item) =>
+        item.category
+          ? this.carsCategory.add(item.category)
+          : this.carsCategory.add('Other')
+      );
     });
   }
 
-  public likeCar(car: ICar): void {
+    likeCar(car: ICar): void {
     car.liked = !car.liked;
     this.carService.updateCar(car).subscribe();
   }
 
-  public changeToggleStatus(toggleStatus): void {
+    changeToggleStatus(toggleStatus): void {
     this.toggleStatus = toggleStatus;
-    console.log('this.toggleStatus: ', this.toggleStatus);
   }
 
-  public getCarsOnCategory(category: string): void {
+    getCarsOnCategory(category: string): void {
     this.selectedCarsOnCategory = this.cars.filter(
       (item) => item.category === category
     );
   }
 
-  public selectCar(car: ICar): void {
+    selectCar(car: ICar): void {
     this.selectedCar = car;
   }
 }
