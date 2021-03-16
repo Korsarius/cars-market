@@ -1,0 +1,59 @@
+.home-wrapper {
+  max-width: 1400px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  section {
+    hr {
+      margin-bottom: 25px;
+      background-color: #512da7;
+    }
+
+    p {
+      color: grey;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      .mat-card-title {
+        font-size: 14px;
+      }
+      .mat-card-subtitle {
+        font-size: 13px;
+      }
+    }
+
+    .card-content-img {
+      height: 150px;
+      object-fit: cover;
+    }
+  }
+}
+
+.card-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .liked-cars {
+    max-width: 200px;
+    margin-bottom: 15px;
+  }
+}
+
+.cars-i-like {
+  width: 30%;
+}
+.my-cars,
+.my-dealers {
+  width: 20%;
+}
+.actions {
+  width: 17%;
+
+  button + button {
+    margin-left: 15px;
+  }
+}
