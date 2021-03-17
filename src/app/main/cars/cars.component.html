@@ -4,7 +4,6 @@
     *ngIf="!categoryView"
     (filterValue)="filterOut($event)"
   ></app-cars-filter>
-  <!-- [foundCars]="filteredCars" -->
   <div>
     <mat-list role="list" *ngIf="categoryView">
       <mat-list-item
@@ -24,7 +23,7 @@
     >
   </div>
 </div>
-<section class="cars-by-category" *ngIf="categoryView">
+<section class="cars-by-category" *ngIf="categoryView && selectedCarsOnCategory && selectedCarsOnCategory.length > 0">
   <div class="cars-list" *ngIf="categoryView && selectedCarsOnCategory">
     <mat-selection-list #cars [multiple]="false" id="selectedCars">
       <mat-list-option
@@ -36,14 +35,40 @@
       </mat-list-option>
     </mat-selection-list>
   </div>
-  <div class="selected-car" *ngIf="selectedCar">
+  <div class="selected-car" *ngIf="defaultCar && isCategorySelected">
     <img
+      ngDefaultControl
+      class="selected-car-img"
+      src="{{ defaultCar.image }}"
+      alt="selected-car-img"
+    />
+  </div>
+  <div class="selected-car" *ngIf="!defaultCar && isCategorySelected">
+    <img
+      ngDefaultControl
       class="selected-car-img"
       src="{{ selectedCar.image }}"
       alt="selected-car-img"
     />
   </div>
-  <div class="selected-car-info" *ngIf="selectedCar">
+  <div class="selected-car-info" *ngIf="defaultCar && isCategorySelected">
+    <h3>{{ defaultCar.model }}</h3>
+    <ul class="car-properties">
+      <li>
+        Dealers: <span>{{ defaultCar.brand }}</span>
+      </li>
+      <li>
+        Class: <span>{{ defaultCar.class }}</span>
+      </li>
+      <li>
+        Year: <span>{{ defaultCar.year }}</span>
+      </li>
+      <li>
+        Color: <span>{{ defaultCar.color }}</span>
+      </li>
+    </ul>
+  </div>
+  <div class="selected-car-info" *ngIf="!defaultCar && isCategorySelected">
     <h3>{{ selectedCar.model }}</h3>
     <ul class="car-properties">
       <li>
