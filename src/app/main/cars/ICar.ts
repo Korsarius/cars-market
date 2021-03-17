@@ -3,10 +3,10 @@ export interface ICar {
   brand: string;
   model: string;
   year?: number;
-  color: string;
+  color?: string;
   class?: string;
-  category: string;
-  image: string;
+  category?: string;
+  image?: string;
   liked: boolean;
   newItem: boolean;
 }

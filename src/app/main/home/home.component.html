@@ -1,10 +1,10 @@
 <div class="home-wrapper">
   <section class="cars-i-like">
     <h4>Cars I like</h4>
-    <hr />
     <div class="card-wrapper">
       <div *ngFor="let car of cars">
         <div class="liked-cars" *ngIf="car.liked">
+          <!-- <app-card class="card" [car]="car"></app-card> -->
           <mat-card class="card">
             <mat-card-header class="card-header">
               <mat-card-title>{{ car.model }}</mat-card-title>
@@ -34,12 +34,10 @@
   </section>
   <section class="my-cars">
     <h4>My Cars</h4>
-    <hr />
     <p>You haven't added any cars yet.</p>
   </section>
   <section class="my-dealers">
     <h4>My Dealers</h4>
-    <hr />
     <p>You haven't added any dealers yet.</p>
   </section>
   <section class="actions">
