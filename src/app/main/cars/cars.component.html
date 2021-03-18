@@ -23,7 +23,7 @@
     >
   </div>
 </div>
-<section class="cars-by-category" *ngIf="categoryView && selectedCarsOnCategory && selectedCarsOnCategory.length > 0">
+<section class="cars-by-category" *ngIf="categoryView && selectedCarsOnCategory">
   <div class="cars-list" *ngIf="categoryView && selectedCarsOnCategory">
     <mat-selection-list #cars [multiple]="false" id="selectedCars">
       <mat-list-option
@@ -35,56 +35,7 @@
       </mat-list-option>
     </mat-selection-list>
   </div>
-  <div class="selected-car" *ngIf="defaultCar && isCategorySelected">
-    <img
-      ngDefaultControl
-      class="selected-car-img"
-      src="{{ defaultCar.image }}"
-      alt="selected-car-img"
-    />
-  </div>
-  <div class="selected-car" *ngIf="!defaultCar && isCategorySelected">
-    <img
-      ngDefaultControl
-      class="selected-car-img"
-      src="{{ selectedCar.image }}"
-      alt="selected-car-img"
-    />
-  </div>
-  <div class="selected-car-info" *ngIf="defaultCar && isCategorySelected">
-    <h3>{{ defaultCar.model }}</h3>
-    <ul class="car-properties">
-      <li>
-        Dealers: <span>{{ defaultCar.brand }}</span>
-      </li>
-      <li>
-        Class: <span>{{ defaultCar.class }}</span>
-      </li>
-      <li>
-        Year: <span>{{ defaultCar.year }}</span>
-      </li>
-      <li>
-        Color: <span>{{ defaultCar.color }}</span>
-      </li>
-    </ul>
-  </div>
-  <div class="selected-car-info" *ngIf="!defaultCar && isCategorySelected">
-    <h3>{{ selectedCar.model }}</h3>
-    <ul class="car-properties">
-      <li>
-        Dealers: <span>{{ selectedCar.brand }}</span>
-      </li>
-      <li>
-        Class: <span>{{ selectedCar.class }}</span>
-      </li>
-      <li>
-        Year: <span>{{ selectedCar.year }}</span>
-      </li>
-      <li>
-        Color: <span>{{ selectedCar.color }}</span>
-      </li>
-    </ul>
-  </div>
+  <app-car-details [car]="defaultCar || selectedCar"></app-car-details>
 </section>
 <!-- If toggle === false -->
 <section class="cars" *ngIf="!categoryView">

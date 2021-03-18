@@ -12,6 +12,7 @@ import { CarsService } from './cars.service';
 import { CarsComponent } from './cars.component';
 import { CarFilterComponent } from '../car-filter/car-filter.component';
 import { CardModule } from './../../shared/components/card/card.module';
+import { CarDetailsModule } from './../car-details/car-details.module';
 
 @NgModule({
   declarations: [CarsComponent, CarFilterComponent],
@@ -24,6 +25,7 @@ import { CardModule } from './../../shared/components/card/card.module';
     MatSlideToggleModule,
     MatListModule,
     CardModule,
+    CarDetailsModule,
   ],
   exports: [CarsComponent],
   providers: [CarsService],

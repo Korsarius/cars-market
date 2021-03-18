@@ -15,7 +15,6 @@ export class CarsComponent implements OnInit {
   trimmedCars: ICar[] = new Array<ICar>();
   filteredCars: ICar[] = new Array<ICar>();
   categoryView: boolean = false;
-  isCategorySelected: boolean = false;
   carsCategory: Set<string> = new Set();
   selectedCarsOnCategory: ICar[];
   selectedCar: ICar;
@@ -63,16 +62,12 @@ export class CarsComponent implements OnInit {
 
   changeCategoryView(categoryView): void {
     this.categoryView = categoryView;
-    if (this.isCategorySelected) {
-      this.isCategorySelected = false;
-    }
   }
 
   getCarsOnCategory(category: string): void {
     this.selectedCarsOnCategory = this.cars.filter(
       (item) => item.category === category
     );
-    this.isCategorySelected = true;
     this.defaultCar = this.selectedCarsOnCategory[0];
   }
 

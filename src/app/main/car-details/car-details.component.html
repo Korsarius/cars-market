@@ -1,0 +1,27 @@
+<div class="car-details-wrapper">
+  <div class="selected-car" *ngIf="car">
+    <img
+      ngDefaultControl
+      class="selected-car-img"
+      src="{{ car.image }}"
+      alt="selected-car-img"
+    />
+  </div>
+  <div class="selected-car-info" *ngIf="car">
+    <h3>{{ car.model }}</h3>
+    <ul class="car-properties">
+      <li>
+        Dealers: <span>{{ car.brand }}</span>
+      </li>
+      <li>
+        Class: <span>{{ car.class }}</span>
+      </li>
+      <li>
+        Year: <span>{{ car.year }}</span>
+      </li>
+      <li>
+        Color: <span>{{ car.color }}</span>
+      </li>
+    </ul>
+  </div>
+</div>

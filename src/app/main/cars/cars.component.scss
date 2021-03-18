@@ -76,27 +76,3 @@
     }
   }
 }
-
-.selected-car {
-  width: 800px;
-  .selected-car-img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-  }
-}
-
-.selected-car-info {
-  .car-properties {
-    list-style-type: none;
-    padding: 0;
-    li + li {
-      margin-top: 15px;
-    }
-    li {
-      span {
-        font-weight: bold;
-      }
-    }
-  }
-}
