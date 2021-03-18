@@ -1,5 +1,3 @@
-import { CarsService } from './cars.service';
-import { CarsComponent } from './cars.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +8,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 
+import { CarsService } from './cars.service';
+import { CarsComponent } from './cars.component';
 import { CarFilterComponent } from '../car-filter/car-filter.component';
+import { CardModule } from './../../shared/components/card/card.module';
 
 @NgModule({
   declarations: [CarsComponent, CarFilterComponent],
@@ -22,6 +23,7 @@ import { CarFilterComponent } from '../car-filter/car-filter.component';
     MatInputModule,
     MatSlideToggleModule,
     MatListModule,
+    CardModule,
   ],
   exports: [CarsComponent],
   providers: [CarsService],

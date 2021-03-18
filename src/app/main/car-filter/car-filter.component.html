@@ -1,19 +1,14 @@
-<!-- <div id="filter-component">
-    <label for="search-box">Car Filter</label>
-    <input #searchBox id="search-box" (input)="search(searchBox.value)" />
-  
-    <ul class="search-result">
-      <li *ngFor="let car of cars$ | async" >
-        <a routerLink="/detail/{{hero.id}}">
-          {{car.model}}
-        </a>
-      </li>
-    </ul>
-  </div> -->
-  <!-- *ngIf="!toggleStatus" -->
-  <form class="search-form">
-    <mat-form-field class="filter-field">
-      <mat-label>Filter by car brand</mat-label>
-      <input matInput #filterInput placeholder="Ex. Ford" value="" (input)="search(filterInput.value)" />
-    </mat-form-field>
-  </form>
+<!-- *ngIf="!categoryView" -->
+<form class="search-form">
+  <mat-form-field class="filter-field">
+    <mat-label>Filter by car brand or model</mat-label>
+    <input
+      matInput
+      #filterInput
+      placeholder="Ex. Ford"
+      value=""
+      (input)="getFilterValue(filterInput.value)"
+      />
+      <!-- (focus)="foundCars.length === 0 ? filterInput.style.backgroundColor = 'red' && filterInput.value = 'Not Found Any Car' : ''" -->
+  </mat-form-field>
+</form>

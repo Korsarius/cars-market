@@ -4,8 +4,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './shared/services/in-memory-data.service';
 
+import { InMemoryDataService } from './shared/services/in-memory-data.service';
 import { MainModule } from './main/main.module';
 import { HomeModule } from './main/home/home.module';
 import { CarsModule } from './main/cars/cars.module';

@@ -415,5 +415,61 @@ export const CARS = [
     image: './assets/images/mercedes-x-class.jpg',
     liked: false,
     newItem: false
-  }
+  },
+
+  // {
+  //   id: '2948198567',
+  //   brand: 'Ford',
+  //   model: 'X-Class',
+  //   year: null,
+  //   color: 'red',
+  //   category: 'pickup truck',
+  //   image: './assets/images/mercedes-x-class.jpg',
+  //   liked: false,
+  //   newItem: false
+  // },
+  // {
+  //   id: '2948198567',
+  //   brand: 'Ford',
+  //   model: 'X-Class',
+  //   year: null,
+  //   color: 'red',
+  //   category: 'pickup truck',
+  //   image: './assets/images/mercedes-x-class.jpg',
+  //   liked: false,
+  //   newItem: false
+  // },
+  // {
+  //   id: '2948198567',
+  //   brand: 'Ford',
+  //   model: 'X-Class',
+  //   year: null,
+  //   color: 'red',
+  //   category: 'pickup truck',
+  //   image: './assets/images/mercedes-x-class.jpg',
+  //   liked: false,
+  //   newItem: false
+  // },
+  // {
+  //   id: '2948198567',
+  //   brand: 'Ford',
+  //   model: 'X-Class',
+  //   year: null,
+  //   color: 'red',
+  //   category: 'pickup truck',
+  //   image: './assets/images/mercedes-x-class.jpg',
+  //   liked: false,
+  //   newItem: false
+  // },
+  // {
+  //   id: '2948198567',
+  //   brand: 'Ford',
+  //   model: 'X-Class',
+  //   year: null,
+  //   color: 'red',
+  //   category: 'pickup truck',
+  //   image: './assets/images/mercedes-x-class.jpg',
+  //   liked: false,
+  //   newItem: false
+  // }
 ];

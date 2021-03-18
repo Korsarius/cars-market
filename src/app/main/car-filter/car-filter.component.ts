@@ -1,11 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Observable, Subject } from 'rxjs';
-
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-
-import { ICar } from '../cars/ICar';
-import { CarsService } from '../cars/cars.service';
+import { ICar } from './../cars/ICar';
 
 @Component({
   selector: 'app-cars-filter',
@@ -13,25 +8,14 @@ import { CarsService } from '../cars/cars.service';
   styleUrls: ['./car-filter.component.scss'],
 })
 export class CarFilterComponent implements OnInit {
-  public cars$?: Observable<ICar[]>;
-  private searchTerms: Subject<string> = new Subject<string>();
+  @Output() filterValue: EventEmitter<string> = new EventEmitter<string>();
+  // @Input() foundCars: ICar[] = new Array<ICar>();
 
-  public constructor(private carService: CarsService) {}
+  constructor() {}
 
-  public search(term: string): void {
-    this.searchTerms.next(term);
+  getFilterValue(value: string): void {
+    this.filterValue.emit(value);
   }
 
-  public ngOnInit(): void {
-    this.cars$ = this.searchTerms.pipe(
-      // wait 300ms after each keystroke before considering the term
-      debounceTime(300),
-
-      // ignore new term if same as previous term
-      distinctUntilChanged(),
-
-      // switch to new search observable each time the term changes
-      switchMap((term: string) => this.carService.searchCars(term))
-    );
-  }
+  ngOnInit(): void {}
 }

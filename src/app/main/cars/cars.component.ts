@@ -9,52 +9,75 @@ import { CarsService } from './cars.service';
   styleUrls: ['./cars.component.scss'],
 })
 export class CarsComponent implements OnInit {
-  public cars: ICar[] = new Array<ICar>();
-  public trimmedCars: ICar[] = new Array<ICar>();
-  @Input() public car?: ICar;
-  public loadMore: boolean = false;
-  public toggleStatus: boolean = false;
-  public carsCategory: Set<string> = new Set();
-  public selectedCarsOnCategory: ICar[] = new Array<ICar>();
-  public selectedCar: ICar;
+  @Input() car?: ICar;
+
+  cars: ICar[] = new Array<ICar>();
+  trimmedCars: ICar[] = new Array<ICar>();
+  filteredCars: ICar[] = new Array<ICar>();
+  categoryView: boolean = false;
+  isCategorySelected: boolean = false;
+  carsCategory: Set<string> = new Set();
+  selectedCarsOnCategory: ICar[];
+  selectedCar: ICar;
+  defaultCar: ICar | null;
+  startIndex: number = 0;
+  endIndex: number = 8;
 
   constructor(private carService: CarsService) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.getCars();
   }
 
-  public getCars(): void {
+  filterOut(filterValue: string): void {
+    setTimeout(() => {
+      this.filteredCars = this.cars.filter(
+        (car) => car.brand === filterValue || car.model === filterValue
+      );
+    }, 500);
+  }
+
+  getCars(): void {
     this.carService.getCars().subscribe((cars) => {
       this.cars = cars;
-      this.trimmedCars = this.cars.slice(0, 8);
-      this.cars.forEach((item) => {
-        if (!item.category) {
-          this.carsCategory.add('Other');
-          return;
-        }
-        this.carsCategory.add(item.category);
-      });
+      this.trimmedCars = this.cars.slice(this.startIndex, 8);
+      this.cars.forEach((item) =>
+        item.category
+          ? this.carsCategory.add(item.category)
+          : this.carsCategory.add('Other')
+      );
     });
   }
 
-  public likeCar(car: ICar): void {
-    car.liked = !car.liked;
-    this.carService.updateCar(car).subscribe();
+  loadMore(): void {
+    this.startIndex = this.endIndex;
+    this.endIndex += 8;
+    this.trimmedCars.push(...this.cars.slice(this.startIndex, this.endIndex));
   }
 
-  public changeToggleStatus(toggleStatus): void {
-    this.toggleStatus = toggleStatus;
-    console.log('this.toggleStatus: ', this.toggleStatus);
+  rollUp(): void {
+    this.trimmedCars = this.cars.slice(0, 8);
+    this.startIndex = 0;
+    this.endIndex = 8;
   }
 
-  public getCarsOnCategory(category: string): void {
+  changeCategoryView(categoryView): void {
+    this.categoryView = categoryView;
+    if (this.isCategorySelected) {
+      this.isCategorySelected = false;
+    }
+  }
+
+  getCarsOnCategory(category: string): void {
     this.selectedCarsOnCategory = this.cars.filter(
       (item) => item.category === category
     );
+    this.isCategorySelected = true;
+    this.defaultCar = this.selectedCarsOnCategory[0];
   }
 
-  public selectCar(car: ICar): void {
+  selectCar(car: ICar): void {
+    this.defaultCar = null;
     this.selectedCar = car;
   }
 }

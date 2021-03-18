@@ -1,22 +1,22 @@
-<!-- <mat-sidenav-container class="example-container">
-  <mat-sidenav mode="side" opened>
-    <nav>
-      <a routerLink="">Home</a>
-      <a routerLink="/cars">Cars</a>
-      <a routerLink="/dealers">Dealers</a>
-    </nav>
-    <!-- <router-outlet></router-outlet>
-  </mat-sidenav>
-  <!-- <mat-sidenav-content>Main content</mat-sidenav-content>
-</mat-sidenav-container> -->
 <div class="awesome-cars">
-<span>Awesome Cars</span>
+  <span>Awesome Cars</span>
 </div>
-<div class="nav-wrapper">
-  <nav>
-    <a routerLink=""><mat-icon aria-hidden="false" aria-label="home icon">home</mat-icon><span>Home</span></a>
-    <a routerLink="/cars"><mat-icon aria-label="cars icon">directions_car</mat-icon>Cars</a>
-    <a routerLink="/dealers"><mat-icon aria-label="dealers icon">stars</mat-icon>Dealers</a>
-  </nav>
-</div>
-<router-outlet></router-outlet>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened>
+    <div class="nav-wrapper">
+      <nav>
+        <a routerLink=""
+          ><mat-icon aria-hidden="false" aria-label="home icon">home</mat-icon
+          ><span>Home</span></a
+        >
+        <a routerLink="/cars"
+          ><mat-icon aria-label="cars icon">directions_car</mat-icon>Cars</a
+        >
+        <a routerLink="/dealers"
+          ><mat-icon aria-label="dealers icon">stars</mat-icon>Dealers</a
+        >
+      </nav>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content><router-outlet></router-outlet></mat-sidenav-content>
+</mat-sidenav-container>
