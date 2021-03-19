@@ -1,3 +1,5 @@
+@import '../../styles/colors.scss';
+
 .awesome-cars {
   position: fixed;
   width: 100%;
@@ -5,10 +7,10 @@
   display: flex;
   align-items: center;
   margin-bottom: 25px;
-  background-color: var(--bc-purple);
+  background-color: $bc-purple;
   font-family: "Playball-Regular", Roboto, "Helvetica Neue", sans-serif;
   font-size: 40px;
-  color: var(--txt-c-white);
+  color: $txt-c-white;
   z-index: 100;
   span {
     padding-left: 15px;
@@ -20,7 +22,7 @@
   width: 80px;
   max-width: 80px;
   margin-top: 65px;
-  background-color: var(--bc-purple);
+  background-color: $bc-purple;
   z-index: 100;
   nav {
     width: 100%;
@@ -28,19 +30,24 @@
     flex-direction: column;
     align-items: center;
     a {
+      width: 91%;
       display: flex;
       margin-top: 25px;
       flex-direction: column;
       align-items: center;
       text-decoration: none;
-      color: var(--txt-c-white);
+      color: $txt-c-white;
+      border-right: 5px solid $b-c-purple;
       .mat-icon {
         height: 22px;
         width: 22px;
       }
     }
+    .a-active {
+      border-right: 5px solid $b-c-white;
+    }
     a:hover {
-      color: var(--txt-c-red);
+      color: $txt-c-red;
     }
   }
 }

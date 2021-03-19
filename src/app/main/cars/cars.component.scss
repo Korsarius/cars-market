@@ -1,3 +1,5 @@
+@import '../../../styles/colors.scss';
+
 // If View cars by category (toggle) === false
 .cars {
   max-width: 1200px;
@@ -27,14 +29,16 @@
   align-items: center;
 }
 
-.category {
-  width: 125px !important;
-  display: flex !important;
-  justify-content: center;
+.toggle {
+  color: $txt-c-grey;
 }
 
-.toggle {
-  color: var(--txt-c-grey);
+.toggle-active {
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 12px 0;
+  border-bottom: 1px solid $b-c-lightgray;
 }
 
 .cars-by-category {
@@ -54,14 +58,14 @@
 }
 
 .mat-list-item {
-  color: var(--txt-c-grey);
+  color: $txt-c-grey;
   cursor: pointer;
-  border-bottom: 2px solid var(--b-c-lightgray);
+  border-bottom: 2px solid $b-c-lightgray;
 }
 
 .mat-list-item:hover {
-  background-color: var(--bc-lightgray);
-  border-bottom: 2px solid var(--b-c-lightpurple);
+  background-color: $bc-lightgray;
+  border-bottom: 2px solid $b-c-lightpurple;
 }
 
 #selectedCars {
@@ -70,7 +74,7 @@
   max-width: 100%;
   .mat-list-option {
     border: none;
-    color: var(--txt-c-black);
+    color: $txt-c-black;
     h3 {
       font-weight: bold;
     }

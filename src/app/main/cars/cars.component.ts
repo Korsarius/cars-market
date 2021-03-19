@@ -1,4 +1,9 @@
+import { debounceTime } from 'rxjs/operators';
+
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 import { ICar } from './ICar';
 import { CarsService } from './cars.service';
@@ -18,22 +23,27 @@ export class CarsComponent implements OnInit {
   carsCategory: Set<string> = new Set();
   selectedCarsOnCategory: ICar[];
   selectedCar: ICar;
-  defaultCar: ICar | null;
   startIndex: number = 0;
   endIndex: number = 8;
+
+  filterControl = new FormControl();
 
   constructor(private carService: CarsService) {}
 
   ngOnInit(): void {
+    this.handleFilter();
     this.getCars();
   }
 
-  filterOut(filterValue: string): void {
-    setTimeout(() => {
-      this.filteredCars = this.cars.filter(
-        (car) => car.brand === filterValue || car.model === filterValue
+  handleFilter(): void {
+    this.filterControl.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe(
+        (value) =>
+          (this.filteredCars = this.cars.filter(
+            (car) => car.brand === value || car.model === value
+          ))
       );
-    }, 500);
   }
 
   getCars(): void {
@@ -62,17 +72,20 @@ export class CarsComponent implements OnInit {
 
   changeCategoryView(categoryView): void {
     this.categoryView = categoryView;
+    this.selectedCarsOnCategory = this.cars.filter(
+      (car) => car.category === this.carsCategory.values().next().value
+    );
+    this.selectedCar = this.selectedCarsOnCategory[0];
   }
 
-  getCarsOnCategory(category: string): void {
+  getCarsOnCategory(category: MatTabChangeEvent): void {
     this.selectedCarsOnCategory = this.cars.filter(
-      (item) => item.category === category
+      (item) => item.category === category.tab.textLabel.toLowerCase()
     );
-    this.defaultCar = this.selectedCarsOnCategory[0];
+    this.selectedCar = this.selectedCarsOnCategory[0];
   }
 
   selectCar(car: ICar): void {
-    this.defaultCar = null;
     this.selectedCar = car;
   }
 }

@@ -1,41 +1,49 @@
 <!-- If toggle === true -->
 <div class="filter-toggle">
-  <app-cars-filter
-    *ngIf="!categoryView"
-    (filterValue)="filterOut($event)"
-  ></app-cars-filter>
+  <form class="search-form" *ngIf="!categoryView">
+    <mat-form-field class="filter-field">
+      <mat-label>Filter by car brand or model</mat-label>
+      <input matInput placeholder="Ex. Ford" [formControl]="filterControl" />
+      <!-- (focus)="foundCars.length === 0 ? filterInput.style.backgroundColor = 'red' && filterInput.value = 'Not Found Any Car' : ''" -->
+    </mat-form-field>
+  </form>
   <div>
-    <mat-list role="list" *ngIf="categoryView">
-      <mat-list-item
+    <mat-tab-group
+      animationDuration="0ms"
+      *ngIf="categoryView"
+      (selectedTabChange)="getCarsOnCategory($event)"
+    >
+      <mat-tab
         class="category"
-        role="listitem"
         *ngFor="let category of carsCategory"
-        (click)="getCarsOnCategory(category)"
-        >{{
-          category.charAt(0).toUpperCase() + category.slice(1)
-        }}</mat-list-item
+        label="{{ category.charAt(0).toUpperCase() + category.slice(1) }}"
       >
-    </mat-list>
+      </mat-tab>
+    </mat-tab-group>
   </div>
-  <div class="toggle">
+  <div class="toggle" [class.toggle-active]="categoryView">
     <mat-slide-toggle (click)="changeCategoryView(!categoryView)"
       >View By Category</mat-slide-toggle
     >
   </div>
 </div>
-<section class="cars-by-category" *ngIf="categoryView && selectedCarsOnCategory">
+<section
+  class="cars-by-category"
+  *ngIf="categoryView && selectedCarsOnCategory"
+>
   <div class="cars-list" *ngIf="categoryView && selectedCarsOnCategory">
     <mat-selection-list #cars [multiple]="false" id="selectedCars">
       <mat-list-option
-        *ngFor="let car of selectedCarsOnCategory"
+        *ngFor="let car of selectedCarsOnCategory; let i = index"
+        [selected]="car && i == 0"
         (click)="selectCar(car)"
-      >
+        >
         <h3>{{ car.model }}</h3>
         <p>{{ car.brand }}</p>
       </mat-list-option>
     </mat-selection-list>
   </div>
-  <app-car-details [car]="defaultCar || selectedCar"></app-car-details>
+  <app-car-details [car]="selectedCar"></app-car-details>
 </section>
 <!-- If toggle === false -->
 <section class="cars" *ngIf="!categoryView">

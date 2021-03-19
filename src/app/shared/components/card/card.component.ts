@@ -10,6 +10,7 @@ import { CarsService } from './../../../main/cars/cars.service';
 })
 export class CardComponent implements OnInit {
   @Input() car: ICar;
+  @Input() showButtons: boolean = true;
 
   constructor(private carService: CarsService) {}
 
