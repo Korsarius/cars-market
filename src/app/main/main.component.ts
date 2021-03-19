@@ -10,10 +10,15 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class MainComponent implements OnInit {
   id: number;
+  activeLink: HTMLElement;
   private routeSubscription: Subscription;
 
   constructor(private route: ActivatedRoute) {
     this.routeSubscription = route.params.subscribe();
+  }
+
+  onSelectLink(link: HTMLElement): void {
+    this.activeLink = link;
   }
 
   ngOnInit(): void {}

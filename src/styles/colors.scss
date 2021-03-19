@@ -1,19 +1,18 @@
-:root {
-  /* background */
-  --bc-lightgray: #d3d3d3;
-  --bc-purple: #512da7;
-  --bc-white: #fff;
+/* background */
+$bc-lightgray: #d3d3d3;
+$bc-purple: #512da7;
+$bc-white: #fff;
 
-  /* text */
-  --txt-c-white: var(--bc-white);
-  --txt-c-black: #000;
-  --txt-c-grey: #808080;
-  --txt-c-red: #ff0000;
-  --txt-c-lightyellow: #ffd765;
-  --txt-c-lightpurple: #563b98;
+/* text */
+$txt-c-white: #fff;
+$txt-c-black: #000;
+$txt-c-grey: #808080;
+$txt-c-red: #ff0000;
+$txt-c-lightyellow: #ffd765;
+$txt-c-lightpurple: #563b98;
 
-  /* border */
-  --b-c-lightpurple: var(--txt-c-lightpurple);
-  --b-c-lightgray: #dbdbdb;
-  --b-c-purple: var(--bc-purple);
-}
+/* border */
+$b-c-white: #fff;
+$b-c-lightpurple: #563b98;
+$b-c-lightgray: #dbdbdb;
+$b-c-purple: #512da7;

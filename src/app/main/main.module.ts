@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
 
-
 @NgModule({
   declarations: [MainComponent],
   imports: [CommonModule, MainRoutingModule, MatSidenavModule, MatIconModule],

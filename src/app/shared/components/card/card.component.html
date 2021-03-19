@@ -1,5 +1,5 @@
 <!-- *ngFor="let car of foundCars.length === 0 ? slicedCars : foundCars" -->
-<mat-card class="card-wrapper">
+<mat-card id="card-wrapper" class="card-wrapper">
   <mat-card-header class="card-header">
     <mat-card-title>{{ car.model }}</mat-card-title>
     <mat-card-subtitle>{{ car.brand }}</mat-card-subtitle>
@@ -21,7 +21,7 @@
       alt="{{ 'Photo of a' + car.model }}"
     />
   </mat-card-content>
-  <mat-card-actions class="card-actions">
+  <mat-card-actions class="card-actions" *ngIf="showButtons">
     <button class="card-actions-link like" (click)="likeCar(car)">
       {{ !car.liked ? "Like" : "Dislake" }}
     </button>

@@ -4,30 +4,7 @@
     <div class="card-wrapper">
       <div *ngFor="let car of cars">
         <div class="liked-cars" *ngIf="car.liked">
-          <!-- <app-card class="card" [car]="car"></app-card> -->
-          <mat-card class="card">
-            <mat-card-header class="card-header">
-              <mat-card-title>{{ car.model }}</mat-card-title>
-              <mat-card-subtitle>{{ car.brand }}</mat-card-subtitle>
-              <button
-                *ngIf="car.liked"
-                mat-icon-button
-                color="warn"
-                aria-label="heart icon"
-                (click)="dislikeCar(car)"
-              >
-                <mat-icon>favorite</mat-icon>
-              </button>
-            </mat-card-header>
-            <mat-card-content class="card-content">
-              <img
-                class="card-content-img"
-                mat-card-image
-                src="{{ car.image }}"
-                alt="{{ 'Photo of a' + car.model }}"
-              />
-            </mat-card-content>
-          </mat-card>
+          <app-card class="card" [car]="car" [showButtons]="false" height="200px"></app-card>
         </div>
       </div>
     </div>
