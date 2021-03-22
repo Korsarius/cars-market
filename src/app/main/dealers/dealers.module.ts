@@ -1,13 +1,40 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { DealersService } from './dealers.service';
 import { DealersComponent } from './dealers.component';
+import { AddDealerDialogComponent } from './../../shared/components/add-dealer-dialog/add-dealer-dialog.component';
+import { AddDealerDialogModule } from './../../shared/components/add-dealer-dialog/add-dealer-dialog.module';
 
 @NgModule({
   declarations: [DealersComponent],
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatTableModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    // AddDealerDialogModule
+  ],
   exports: [DealersComponent],
+  entryComponents: [
+    AddDealerDialogComponent
+  ],
   providers: [DealersService],
 })
 export class DealersModule {}

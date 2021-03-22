@@ -70,7 +70,7 @@ export class CarsComponent implements OnInit {
     this.endIndex = 8;
   }
 
-  changeCategoryView(categoryView): void {
+  changeCategoryView(categoryView: boolean): void {
     this.categoryView = categoryView;
     this.selectedCarsOnCategory = this.cars.filter(
       (car) => car.category === this.carsCategory.values().next().value
@@ -82,6 +82,9 @@ export class CarsComponent implements OnInit {
     this.selectedCarsOnCategory = this.cars.filter(
       (item) => item.category === category.tab.textLabel.toLowerCase()
     );
+    if (this.selectedCarsOnCategory.length === 0) {
+      this.selectedCarsOnCategory = this.cars.filter((car) => !car.category);
+    }
     this.selectedCar = this.selectedCarsOnCategory[0];
   }
 
