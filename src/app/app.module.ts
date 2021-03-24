@@ -12,6 +12,7 @@ import { CarsModule } from './main/cars/cars.module';
 import { DealersModule } from './main/dealers/dealers.module';
 
 import { AppComponent } from './app.component';
+import { DealerDialogModule } from './shared/components/dealer-dialog/dealer-dialog.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,6 +28,7 @@ import { AppComponent } from './app.component';
     HomeModule,
     CarsModule,
     DealersModule,
+    DealerDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent],

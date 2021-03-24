@@ -1,9 +1,10 @@
 export interface IDealer {
   id: string;
   name: string;
-  amountOfCars: number;
+  amountOfCars?: number;
   country: string;
   foundedIn: number;
-  newRecord: boolean;
+  newRecord?: boolean;
   headquarters: string;
+  registrationDate?: string;
 }

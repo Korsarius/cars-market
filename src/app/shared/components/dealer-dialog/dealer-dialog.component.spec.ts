@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddDealerDialogComponent } from './add-dealer-dialog.component';
+import { DealerDialogComponent } from './dealer-dialog.component';
 
-describe('AddDealerDialogComponent', () => {
-  let component: AddDealerDialogComponent;
-  let fixture: ComponentFixture<AddDealerDialogComponent>;
+describe('DealerDialogComponent', () => {
+  let component: DealerDialogComponent;
+  let fixture: ComponentFixture<DealerDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddDealerDialogComponent ]
+      declarations: [ DealerDialogComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddDealerDialogComponent);
+    fixture = TestBed.createComponent(DealerDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

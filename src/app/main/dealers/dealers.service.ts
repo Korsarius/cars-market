@@ -46,8 +46,22 @@ export class DealersService {
     const url: string = `${this.dealersUrl}/${id}`;
     console.log('url: ', url);
 
-    return this.http.delete<IDealer>(url, this.httpOptions).pipe(
-      catchError(this.handleError<IDealer>('deleteDealer'))
-    );
+    return this.http
+      .delete<IDealer>(url, this.httpOptions)
+      .pipe(catchError(this.handleError<IDealer>('deleteDealer')));
+  }
+
+  /** POST: add a new dealer to the server */
+  public addDealer(dealer: IDealer): Observable<IDealer> {
+    return this.http
+      .post<IDealer>(this.dealersUrl, dealer, this.httpOptions)
+      .pipe(catchError(this.handleError<IDealer>('addDealer')));
+  }
+
+  /** PUT: update the hero on the server */
+  public updateDealer(dealer: IDealer): Observable<any> {
+    return this.http
+      .put(this.dealersUrl, dealer, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('updateDealer')));
   }
 }

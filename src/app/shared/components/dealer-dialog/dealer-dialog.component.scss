@@ -1,4 +1,4 @@
-@import '../../../../styles/colors.scss';
+@import "../../../../styles/colors.scss";
 
 .add-dealer-form {
   min-width: 335px;
@@ -19,9 +19,20 @@
     cursor: pointer;
   }
   button + button {
-      margin-left: 10px;
+    margin-left: 10px;
   }
   .cancel-btn:hover {
-      background-color: rgb(233, 233, 233);
+    background-color: rgb(233, 233, 233);
   }
+}
+
+// .idInput {
+//   .full-width {
+//     width: 100%;
+//   }
+// }
+
+.error {
+  font-size: 11px;
+  color: $txt-c-red;
 }

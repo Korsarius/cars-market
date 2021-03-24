@@ -13,8 +13,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { DealersService } from './dealers.service';
 import { DealersComponent } from './dealers.component';
-import { AddDealerDialogComponent } from './../../shared/components/add-dealer-dialog/add-dealer-dialog.component';
-import { AddDealerDialogModule } from './../../shared/components/add-dealer-dialog/add-dealer-dialog.module';
+import { DealerDialogComponent } from '../../shared/components/dealer-dialog/dealer-dialog.component';
+import { DealerDialogModule } from 'src/app/shared/components/dealer-dialog/dealer-dialog.module';
 
 @NgModule({
   declarations: [DealersComponent],
@@ -29,12 +29,10 @@ import { AddDealerDialogModule } from './../../shared/components/add-dealer-dial
     MatButtonModule,
     MatDialogModule,
     ReactiveFormsModule,
-    // AddDealerDialogModule
+    DealerDialogModule,
   ],
   exports: [DealersComponent],
-  entryComponents: [
-    AddDealerDialogComponent
-  ],
+  entryComponents: [DealerDialogComponent],
   providers: [DealersService],
 })
 export class DealersModule {}

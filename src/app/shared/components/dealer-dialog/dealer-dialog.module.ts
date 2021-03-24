@@ -7,11 +7,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
-import { AddDealerDialogComponent } from './add-dealer-dialog.component';
-import { DealersModule } from './../../../main/dealers/dealers.module';
+import { DealerDialogComponent } from './dealer-dialog.component';
 
 @NgModule({
-  declarations: [AddDealerDialogComponent],
+  declarations: [DealerDialogComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -19,12 +18,8 @@ import { DealersModule } from './../../../main/dealers/dealers.module';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    // DealersModule
     ReactiveFormsModule,
   ],
-  exports: [AddDealerDialogComponent],
-  // providers: [
-  //   { provide: , useValue: { appearance: 'fill' } },
-  // ]
+  exports: [DealerDialogComponent],
 })
-export class AddDealerDialogModule {}
+export class DealerDialogModule {}

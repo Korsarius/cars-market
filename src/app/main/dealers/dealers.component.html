@@ -10,7 +10,7 @@
       />
     </mat-form-field>
     <div>
-      <button mat-raised-button color="primary" (click)="openDialog()">Add Dealer</button>
+      <button mat-raised-button color="primary" (click)="openDialog('addDialog')">Add Dealer</button>
     </div>
   </div>
 
@@ -54,7 +54,7 @@
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let dealer">
-          <button class="edit-btn">
+          <button class="edit-btn" (click)="openDialog('editDialog', dealer)">
             <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
           </button>
         </td>

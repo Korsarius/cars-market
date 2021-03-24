@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { IDealer } from './IDealer';
 import { DealersService } from './dealers.service';
-import { AddDealerDialogComponent } from '../../shared/components/add-dealer-dialog/add-dealer-dialog.component';
+import { DealerDialogComponent } from '../../shared/components/dealer-dialog/dealer-dialog.component';
 
 @Component({
   selector: 'app-dealers',
@@ -30,6 +30,8 @@ export class DealersComponent implements OnInit {
   dataSource: MatTableDataSource<IDealer>;
   dealers: IDealer[];
 
+  dialogValue: IDealer;
+
   constructor(
     private dealerService: DealersService,
     public dialog: MatDialog
@@ -48,7 +50,7 @@ export class DealersComponent implements OnInit {
   updateTable(): void {
     // Assign the new data to the data source for the table to render
     this.dealerService.getDealers().subscribe((dealers) => {
-      this.dealers = dealers;
+      this.dealers = dealers.reverse();
       this.dataSource = new MatTableDataSource(this.dealers);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -64,8 +66,23 @@ export class DealersComponent implements OnInit {
     }
   }
 
-  openDialog(): void {
-    this.dialog.open(AddDealerDialogComponent);
+  openDialog(type: string, dealer?: IDealer): void {
+    const dialogRef = this.dialog.open(DealerDialogComponent, {
+      data: { dialogueType: type, dealer },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.dialogValue = result.data;
+        if (result.dialogueType === 'addDialog') {
+          this.dealerService.addDealer(this.dialogValue).subscribe();
+        }
+        if (result.dialogueType === 'editDialog') {
+          this.dealerService.updateDealer(this.dialogValue).subscribe();
+        }
+        this.updateTable();
+      }
+    });
   }
 
   deleteDealer(dealer: IDealer): void {
