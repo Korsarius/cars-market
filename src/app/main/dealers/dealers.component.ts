@@ -50,7 +50,7 @@ export class DealersComponent implements OnInit {
   updateTable(): void {
     // Assign the new data to the data source for the table to render
     this.dealerService.getDealers().subscribe((dealers) => {
-      this.dealers = dealers.reverse();
+      this.dealers = dealers;
       this.dataSource = new MatTableDataSource(this.dealers);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;

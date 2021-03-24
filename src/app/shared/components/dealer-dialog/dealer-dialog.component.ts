@@ -17,21 +17,13 @@ export class DealerDialogComponent implements OnInit {
   // idNameFormControl = new FormControl('', [Validators.required]);
 
   dealer: IDealer;
+  savedDealer: IDealer;
   dealers: IDealer[];
 
-  id: string;
-  name: string;
-  amountOfCars: number;
-  country: string;
-  foundedIn: number;
-  newRecord: boolean;
-  headquarters: string;
-
-  registrationDate: string;
+  shownErrors: boolean = false;
 
   invalidID: boolean = false;
   invalidIDTwo: boolean = false;
-  // invalidName: boolean = true;
 
   constructor(
     private dialogRef: MatDialogRef<DealerDialogComponent>,
@@ -51,6 +43,12 @@ export class DealerDialogComponent implements OnInit {
     this.dealerService
       .getDealers()
       .subscribe((dealers) => (this.dealers = dealers));
+    if (this.data.dealer) {
+      this.dealer = { ...this.data.dealer }; //sideEffect
+    } else {
+      this.dealer = {};
+    }
+    console.log('this.dealer: ', this.dealer);
   }
 
   // setDealersId(value: string): void {
@@ -73,12 +71,12 @@ export class DealerDialogComponent implements OnInit {
   saveDealer(dialogueType: string): void {
     // this.invalidID = true;
     // this.invalidName = true;
-    this.dealer = {
-      id: this.id || this.data.dealer.id,
-      name: this.name || this.data.dealer.name,
-      country: this.country || this.data.dealer.country,
-      headquarters: this.headquarters || this.data.dealer.headquarters,
-      foundedIn: this.foundedIn || this.data.dealer.foundedIn,
+    this.savedDealer = {
+      id: this.dealer.id,
+      name: this.dealer.name,
+      country: this.dealer.country,
+      headquarters: this.dealer.headquarters,
+      foundedIn: this.dealer.foundedIn,
       amountOfCars: 0,
       newRecord: dialogueType === 'addDialog' ? true : false,
       registrationDate:
@@ -86,7 +84,11 @@ export class DealerDialogComponent implements OnInit {
           ? new Date().toLocaleString()
           : this.data.dealer.registrationDate,
     };
-    console.log('this.dealer: ', this.dealer);
-    this.dialogRef.close({ event: 'close', data: this.dealer, dialogueType });
+    console.log('this.savedDealer: ', this.savedDealer);
+    this.dialogRef.close({
+      event: 'close',
+      data: this.savedDealer,
+      dialogueType,
+    });
   }
 }

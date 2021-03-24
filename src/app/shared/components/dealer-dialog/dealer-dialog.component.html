@@ -1,10 +1,6 @@
-<!-- Add Dialog -->
-<div class="add-dealer-dialog" *ngIf="data.dialogueType === 'addDialog'">
-  <h1 mat-dialog-title>Add Dealer</h1>
-  <div mat-dialog-content>
-    <!-- Form Group, Form Control -->
+<!-- Form Group, Form Control -->
 
-    <!-- <form [formGroup]="addDealerForm" class="add-dealer-form">
+<!-- <form [formGroup]="addDealerForm" class="add-dealer-form">
     <mat-form-field class="full-width">
       <mat-label>Id *</mat-label>
       <input type="text" matInput formControlName="id" />
@@ -53,91 +49,58 @@
     </mat-form-field>
   </form> -->
 
-    <!-- ngModel -->
-    <div class="add-dealer-form">
-      <mat-form-field class="full-width">
-        <mat-label>Id *</mat-label>
-        <input type="text" matInput #idInput [(ngModel)]="id" />
-        <mat-hint class="error" *ngIf="idInput.value === ''"
-          >Id is <strong>required</strong></mat-hint
-        >
-      </mat-form-field>
-      <div #error *ngFor="let dealer of dealers">
-        <mat-hint class="error" *ngIf="dealer.id === id">
-          The id is already <strong>taken</strong>
-        </mat-hint>
-      </div>
-      <mat-form-field class="full-width">
-        <mat-label>Name *</mat-label>
-        <input type="text" matInput #nameInput [(ngModel)]="name" />
-        <mat-hint class="error" *ngIf="nameInput.value === ''"
-          >Id is <strong>required</strong></mat-hint
-        >
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <mat-label>Headquarters</mat-label>
-        <input type="text" matInput [(ngModel)]="headquarters" />
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <mat-label>Country</mat-label>
-        <input type="text" matInput [(ngModel)]="country" />
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <mat-label>Founded in</mat-label>
-        <input type="text" matInput [(ngModel)]="foundedIn" />
-      </mat-form-field>
-    </div>
-  </div>
-  <div mat-dialog-actions class="dialog-actions">
-    <button mat-button class="cancel-btn" (click)="close()">Cancel</button>
-    <button
-      mat-button
-      [disabled]="idInput.value === '' || nameInput.value === ''"
-      (click)="saveDealer(data.dialogueType)"
-    >
-      Save
-    </button>
-  </div>
-</div>
-
-<!-- ngModel - Edit Dialog -->
-<div class="edit-dealer-dialog" *ngIf="data.dialogueType === 'editDialog'">
-  <h1 mat-dialog-title>Edit Dealer</h1>
+<!-- ngModel -->
+<div class="dealer-dialog">
+  <h1 mat-dialog-title>
+    {{ data.dialogueType === "addDialog" ? "Add Dealer" : "Edit Dealer" }}
+  </h1>
   <div mat-dialog-content>
-    <div class="add-dealer-form">
-      <mat-form-field class="full-width">
+    <div class="dealer-form">
+      <div class="validId" *ngIf="data.dialogueType === 'addDialog'">
+        <mat-form-field class="full-width">
+          <mat-label>Id *</mat-label>
+          <input type="text" matInput #idInput [(ngModel)]="dealer.id" />
+          <mat-hint class="error" *ngIf="idInput.value === ''"
+            >Id is <strong>required</strong></mat-hint
+          >
+        </mat-form-field>
+        <div #error *ngFor="let d of dealers">
+          <mat-hint class="error" *ngIf="d.id === dealer.id">
+            The id is already <strong>taken</strong>
+          </mat-hint>
+        </div>
+      </div>
+      <mat-form-field
+        *ngIf="data.dialogueType === 'editDialog'"
+        class="full-width"
+      >
         <mat-label>Id</mat-label>
-        <input
-          type="text"
-          disabled
-          [ngModel]="data.dealer.id"
-          matInput
-          #idInput
-        />
+        <input type="text" disabled [ngModel]="dealer.id" matInput />
       </mat-form-field>
       <mat-form-field class="full-width">
         <mat-label>Name *</mat-label>
-        <input type="text" matInput #nameInput [ngModel]="data.dealer.name" (ngModelChange)="name = $event" />
+        <input type="text" matInput #nameInput [(ngModel)]="dealer.name" />
         <mat-hint class="error" *ngIf="nameInput.value === ''"
-          >Id is <strong>required</strong></mat-hint
+          >Name is <strong>required</strong></mat-hint
         >
       </mat-form-field>
       <mat-form-field class="full-width">
         <mat-label>Headquarters</mat-label>
-        <input type="text" matInput [ngModel]="data.dealer.headquarters" (ngModelChange)="headquarters = $event" />
+        <input type="text" matInput [(ngModel)]="dealer.headquarters" />
       </mat-form-field>
       <mat-form-field class="full-width">
         <mat-label>Country</mat-label>
-        <input type="text" matInput [ngModel]="data.dealer.country" (ngModelChange)="country = $event" />
+        <input type="text" matInput [(ngModel)]="dealer.country" />
       </mat-form-field>
       <mat-form-field class="full-width">
         <mat-label>Founded in</mat-label>
-        <input type="text" matInput [ngModel]="data.dealer.foundedIn" (ngModelChange)="foundedIn = $event" />
+        <input type="number" matInput [(ngModel)]="dealer.foundedIn" />
       </mat-form-field>
     </div>
   </div>
   <div mat-dialog-actions class="dialog-actions">
     <button mat-button class="cancel-btn" (click)="close()">Cancel</button>
+    <!-- [disabled]="idInput.value === '' || nameInput.value === ''" -->
     <button
       mat-button
       [disabled]="nameInput.value === ''"

@@ -1,6 +1,6 @@
 @import "../../../../styles/colors.scss";
 
-.add-dealer-form {
+.dealer-form {
   min-width: 335px;
   display: flex;
   flex-direction: column;
@@ -26,11 +26,11 @@
   }
 }
 
-// .idInput {
-//   .full-width {
-//     width: 100%;
-//   }
-// }
+.validId {
+  .full-width {
+    width: 100%;
+  }
+}
 
 .error {
   font-size: 11px;
