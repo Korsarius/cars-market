@@ -7,8 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { HomeService } from './home.service';
 import { HomeComponent } from './home.component';
+import { CarDialogComponent } from '../../shared/components/car-dialog/car-dialog.component';
 import { CarsModule } from './../cars/cars.module';
 import { CardModule } from './../../shared/components/card/card.module';
+import { CarDialogModule } from '../../shared/components/car-dialog/car-dialog.module';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -18,9 +20,11 @@ import { CardModule } from './../../shared/components/card/card.module';
     MatButtonModule,
     MatIconModule,
     CarsModule,
-    CardModule
+    CardModule,
+    CarDialogModule,
   ],
   exports: [HomeComponent],
+  entryComponents: [CarDialogComponent],
   providers: [HomeService],
 })
 export class HomeModule {}

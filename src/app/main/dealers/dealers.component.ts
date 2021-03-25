@@ -66,20 +66,17 @@ export class DealersComponent implements OnInit {
     }
   }
 
-  openDialog(type: string, dealer?: IDealer): void {
+  openDialog(dealer: IDealer | null = null): void {
     const dialogRef = this.dialog.open(DealerDialogComponent, {
-      data: { dialogueType: type, dealer },
+      data: { dealer },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.dialogValue = result.data;
-        if (result.dialogueType === 'addDialog') {
-          this.dealerService.addDealer(this.dialogValue).subscribe();
-        }
-        if (result.dialogueType === 'editDialog') {
-          this.dealerService.updateDealer(this.dialogValue).subscribe();
-        }
+        result.data.newRecord
+          ? this.dealerService.addDealer(this.dialogValue).subscribe()
+          : this.dealerService.updateDealer(this.dialogValue).subscribe();
         this.updateTable();
       }
     });

@@ -1,86 +1,31 @@
-<!-- Form Group, Form Control -->
-
-<!-- <form [formGroup]="addDealerForm" class="add-dealer-form">
-    <mat-form-field class="full-width">
-      <mat-label>Id *</mat-label>
-      <input type="text" matInput formControlName="id" />
-      <mat-error *ngIf="idNameFormControl.hasError('required')">
-        Id is <strong>required</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Name *</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="name"
-        placeholder="Ex. Ford"
-      />
-      <mat-error *ngIf="idNameFormControl.hasError('required')">
-        Name is <strong>required</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Headquarters</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="headquarters"
-        placeholder="Ex. Dearborn, Michigan"
-      />
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Country</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="country"
-        placeholder="Ex. United States"
-      />
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Founded in</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="foundedIn"
-        placeholder="Ex. 1903"
-      />
-    </mat-form-field>
-  </form> -->
-
-<!-- ngModel -->
 <div class="dealer-dialog">
   <h1 mat-dialog-title>
-    {{ data.dialogueType === "addDialog" ? "Add Dealer" : "Edit Dealer" }}
+    {{ isEdit ? "Edit Dealer" : "Add Dealer" }}
   </h1>
   <div mat-dialog-content>
     <div class="dealer-form">
-      <div class="validId" *ngIf="data.dialogueType === 'addDialog'">
+      <div class="validId">
         <mat-form-field class="full-width">
           <mat-label>Id *</mat-label>
-          <input type="text" matInput #idInput [(ngModel)]="dealer.id" />
-          <mat-hint class="error" *ngIf="idInput.value === ''"
+          <input
+            type="text"
+            matInput
+            [disabled]="isEdit"
+            (keyup)="!isEdit && check()"
+            [(ngModel)]="dealer.id"
+          />
+          <mat-hint class="error" *ngIf="dealer.id === '' || dealer.id === null"
             >Id is <strong>required</strong></mat-hint
           >
-        </mat-form-field>
-        <div #error *ngFor="let d of dealers">
-          <mat-hint class="error" *ngIf="d.id === dealer.id">
+          <mat-hint *ngIf="shownError" class="error">
             The id is already <strong>taken</strong>
           </mat-hint>
-        </div>
+        </mat-form-field>
       </div>
-      <mat-form-field
-        *ngIf="data.dialogueType === 'editDialog'"
-        class="full-width"
-      >
-        <mat-label>Id</mat-label>
-        <input type="text" disabled [ngModel]="dealer.id" matInput />
-      </mat-form-field>
       <mat-form-field class="full-width">
         <mat-label>Name *</mat-label>
         <input type="text" matInput #nameInput [(ngModel)]="dealer.name" />
-        <mat-hint class="error" *ngIf="nameInput.value === ''"
+        <mat-hint class="error" *ngIf="!dealer.name"
           >Name is <strong>required</strong></mat-hint
         >
       </mat-form-field>
@@ -100,11 +45,10 @@
   </div>
   <div mat-dialog-actions class="dialog-actions">
     <button mat-button class="cancel-btn" (click)="close()">Cancel</button>
-    <!-- [disabled]="idInput.value === '' || nameInput.value === ''" -->
     <button
       mat-button
-      [disabled]="nameInput.value === ''"
-      (click)="saveDealer(data.dialogueType)"
+      [disabled]="!dealer.id || !dealer.name"
+      (click)="saveDealer()"
     >
       Save
     </button>
