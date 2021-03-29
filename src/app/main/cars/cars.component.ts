@@ -1,4 +1,5 @@
-import { debounceTime } from 'rxjs/operators';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -26,7 +27,7 @@ export class CarsComponent implements OnInit {
   startIndex: number = 0;
   endIndex: number = 8;
 
-  filterControl = new FormControl();
+  filterControl: FormControl = new FormControl();
 
   constructor(private carService: CarsService) {}
 
@@ -38,12 +39,18 @@ export class CarsComponent implements OnInit {
   handleFilter(): void {
     this.filterControl.valueChanges
       .pipe(debounceTime(500))
-      .subscribe(
-        (value) =>
-          (this.filteredCars = this.cars.filter(
-            (car) => car.brand === value || car.model === value
-          ))
-      );
+      .subscribe((value) => {
+        if (value === '') {
+          this.filteredCars = new Array<ICar>();
+          this.trimmedCars = this.cars.slice(0, 8);
+        } else {
+          this.filteredCars = this.cars.filter(
+            (car) =>
+              car.brand.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
+              car.model.toLowerCase().indexOf(value.toLowerCase()) !== -1
+          );
+        }
+      });
   }
 
   getCars(): void {
@@ -72,6 +79,7 @@ export class CarsComponent implements OnInit {
 
   changeCategoryView(categoryView: boolean): void {
     this.categoryView = categoryView;
+    this.trimmedCars = this.cars.slice(0, 8);
     this.selectedCarsOnCategory = this.cars.filter(
       (car) => car.category === this.carsCategory.values().next().value
     );
@@ -90,5 +98,10 @@ export class CarsComponent implements OnInit {
 
   selectCar(car: ICar): void {
     this.selectedCar = car;
+  }
+
+  likeOrDislikeCar(car: ICar): void {
+    car.liked = !car.liked;
+    this.carService.updateCar(car).subscribe();
   }
 }

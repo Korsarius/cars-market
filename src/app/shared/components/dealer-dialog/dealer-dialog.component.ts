@@ -28,9 +28,13 @@ export class DealerDialogComponent implements OnInit {
     this.dealerService
       .getDealers()
       .subscribe((dealers) => (this.dealers = dealers));
-    this.data.dealer
-      ? (this.dealer = { ...this.data.dealer }) && (this.isEdit = true)
-      : (this.dealer = initDealer());
+    if (!this.data) {
+      this.dealer = initDealer();
+    } else {
+      this.data.dealer
+        ? (this.dealer = { ...this.data.dealer }) && (this.isEdit = true)
+        : (this.dealer = initDealer());
+    }
   }
 
   check(): void {
@@ -47,10 +51,8 @@ export class DealerDialogComponent implements OnInit {
     const updatedDealer = {
       ...this.dealer,
       id: this.dealer.id.toUpperCase(),
-      newRecord: !this.isEdit,
-      registrationDate: this.isEdit
-        ? this.dealer.registrationDate
-        : new Date().toLocaleString(),
+      newRecord: true,
+      registrationDate: this.isEdit ? this.dealer.registrationDate : new Date(),
     };
     this.dialogRef.close({
       event: 'close',

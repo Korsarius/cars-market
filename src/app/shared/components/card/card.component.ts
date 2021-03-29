@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { ICar } from './../../../main/cars/ICar';
-import { CarsService } from './../../../main/cars/cars.service';
 
 @Component({
   selector: 'app-card',
@@ -11,13 +10,13 @@ import { CarsService } from './../../../main/cars/cars.service';
 export class CardComponent implements OnInit {
   @Input() car: ICar;
   @Input() showButtons: boolean = true;
+  @Output() likedCar: EventEmitter<ICar> = new EventEmitter<ICar>();
 
-  constructor(private carService: CarsService) {}
+  constructor() {}
 
   ngOnInit(): void {}
 
-  likeCar(car: ICar): void {
-    car.liked = !car.liked;
-    this.carService.updateCar(car).subscribe();
+  changeCar(car: ICar): void {
+    this.likedCar.emit(car);
   }
 }

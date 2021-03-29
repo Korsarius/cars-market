@@ -3,7 +3,12 @@
   <form class="search-form" *ngIf="!categoryView">
     <mat-form-field class="filter-field">
       <mat-label>Filter by car brand or model</mat-label>
-      <input matInput placeholder="Ex. Ford" [formControl]="filterControl" />
+      <input
+        matInput
+        #filterInput
+        placeholder="Ex. Ford"
+        [formControl]="filterControl"
+      />
       <!-- (focus)="foundCars.length === 0 ? filterInput.style.backgroundColor = 'red' && filterInput.value = 'Not Found Any Car' : ''" -->
     </mat-form-field>
   </form>
@@ -37,7 +42,7 @@
         *ngFor="let car of selectedCarsOnCategory; let i = index"
         [selected]="car && i == 0"
         (click)="selectCar(car)"
-        >
+      >
         <h3>{{ car.model }}</h3>
         <p>{{ car.brand }}</p>
       </mat-list-option>
@@ -51,6 +56,7 @@
     class="card"
     *ngFor="let car of filteredCars.length === 0 ? trimmedCars : filteredCars"
     [car]="car"
+    (likedCar)="likeOrDislikeCar(car)"
   ></app-card>
 </section>
 <div class="load-more" *ngIf="!categoryView">

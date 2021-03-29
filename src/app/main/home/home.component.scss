@@ -13,7 +13,7 @@
       border-bottom: 2px solid $b-c-purple;
     }
 
-    p {
+    .default-text {
       color: $txt-c-grey;
     }
 
@@ -40,9 +40,14 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  .liked-cars {
+  .small-card {
     max-width: 200px;
     margin-bottom: 15px;
+    ::ng-deep {
+      .mat-card-header-text {
+        margin: 0;
+      }
+    }
   }
 }
 
@@ -61,4 +66,21 @@
   }
 }
 
-
+.dealer-info-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  .dealer-name {
+    margin: 0;
+    font-size: 15px;
+    font-weight: bold;
+    color: $txt-c-black;
+  }
+  .dealer-info {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+}

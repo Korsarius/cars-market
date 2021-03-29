@@ -46,4 +46,15 @@ export class CarsService {
       .put(this.carsUrl, car, this.httpOptions)
       .pipe(catchError(this.handleError<any>('updateCar')));
   }
+
+  // /* GET cars whose name contains search term */
+  // public searchCars(term: string): Observable<ICar[]> {
+  //   if (!term.trim()) {
+  //     // if not search term, return empty hero array.
+  //     return of([]);
+  //   }
+  //   return this.http
+  //     .get<ICar[]>(`${this.carsUrl}/?name=${term}`)
+  //     .pipe(catchError(this.handleError<ICar[]>(`searchCars`, [])));
+  // }
 }
