@@ -1,0 +1,30 @@
+.car-dialog-wrapper {
+  width: 400px;
+  .car-dialog {
+    display: flex;
+    flex-direction: column;
+    .car-description {
+      height: 60px;
+    }
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.car-description {
+  height: 100px;
+  width: 400px;
+  margin-bottom: 10px;
+}

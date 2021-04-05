@@ -14,6 +14,7 @@ import { DealersModule } from './main/dealers/dealers.module';
 import { AppComponent } from './app.component';
 import { DealerDialogModule } from './shared/components/dealer-dialog/dealer-dialog.module';
 import { CarDialogModule } from './shared/components/car-dialog/car-dialog.module';
+import { ConfirmDialogModule } from './shared/components/confirm-dialog/confirm-dialog.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +32,7 @@ import { CarDialogModule } from './shared/components/car-dialog/car-dialog.modul
     DealersModule,
     DealerDialogModule,
     CarDialogModule,
+    ConfirmDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent],

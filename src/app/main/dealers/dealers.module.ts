@@ -10,11 +10,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { DealersService } from './dealers.service';
 import { DealersComponent } from './dealers.component';
-import { DealerDialogComponent } from '../../shared/components/dealer-dialog/dealer-dialog.component';
 import { DealerDialogModule } from 'src/app/shared/components/dealer-dialog/dealer-dialog.module';
+import { DealerDialogComponent } from '../../shared/components/dealer-dialog/dealer-dialog.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [DealersComponent],
@@ -28,11 +30,12 @@ import { DealerDialogModule } from 'src/app/shared/components/dealer-dialog/deal
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     DealerDialogModule,
   ],
   exports: [DealersComponent],
-  entryComponents: [DealerDialogComponent],
+  entryComponents: [DealerDialogComponent, ConfirmDialogComponent],
   providers: [DealersService],
 })
 export class DealersModule {}

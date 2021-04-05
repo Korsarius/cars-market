@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+import { ICar } from './../../../main/cars/ICar';
+import { IDealer } from '../../../main/dealers/IDealer';
 
 @Component({
   selector: 'app-car-dialog',
@@ -8,19 +11,22 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./car-dialog.component.scss'],
 })
 export class CarDialogComponent implements OnInit {
-  // addDealerForm: FormGroup;
+  constructor(
+    private dialogRef: MatDialogRef<CarDialogComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { dealer: IDealer; car: ICar }
+  ) {}
 
-  // idNameFormControl = new FormControl('', [Validators.required]);
-  
-  constructor() {}
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-    // this.addDealerForm = new FormGroup({
-    //   id: new FormControl('', Validators.required),
-    //   name: new FormControl('', Validators.required),
-    //   headquarters: new FormControl(),
-    //   country: new FormControl(),
-    //   foundedIn: new FormControl(),
-    // });
+  close(): void {
+    this.dialogRef.close();
+  }
+
+  saveCar(car: ICar): void {
+    this.dialogRef.close({
+      event: 'close',
+      data: car,
+    });
   }
 }

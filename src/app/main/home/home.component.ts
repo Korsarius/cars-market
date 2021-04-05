@@ -1,3 +1,5 @@
+import { debounceTime, delay } from 'rxjs/operators';
+
 import { Component, OnInit } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -16,10 +18,12 @@ import { DealersService } from '../dealers/dealers.service';
 })
 export class HomeComponent implements OnInit {
   cars: ICar[] | null = new Array<ICar>();
+  newCars: ICar[] = new Array<ICar>();
   likedCar: ICar;
   carDialogValue: ICar;
   dealerDialogValue: IDealer;
   newDealers: IDealer[] = new Array<IDealer>();
+  loaded: boolean = false;
 
   constructor(
     private carService: CarsService,
@@ -33,10 +37,16 @@ export class HomeComponent implements OnInit {
   }
 
   getCars(): void {
-    this.carService.getCars().subscribe((cars) => {
-      this.likedCar = cars.find((car) => car.liked);
-      return (this.cars = cars.filter((car) => car.liked));
-    });
+    this.carService
+      .getCars()
+      .pipe(delay(1000))
+      .subscribe((cars) => {
+        this.loaded = true;
+        this.likedCar = cars.find((car: ICar) => car.liked);
+        console.log('this.likedCar: ', this.likedCar);
+        this.cars = cars.filter((car: ICar) => car.liked);
+        this.newCars = cars.filter((car: ICar) => car.creationDate);
+      });
   }
 
   getDealers(): void {
@@ -67,5 +77,16 @@ export class HomeComponent implements OnInit {
 
   openCarDialog(): void {
     const dialogRef = this.dialog.open(CarDialogComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.carDialogValue = result.data;
+        this.carService.addCar(this.carDialogValue).subscribe((car) => {
+          this.newCars.push(car);
+          console.log('this.newCars: ', this.newCars);
+          console.log('this.newCars[0].image: ', this.newCars[0].image);
+        });
+      }
+    });
   }
 }

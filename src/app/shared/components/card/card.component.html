@@ -24,6 +24,8 @@
     <button class="card-actions-link like" (click)="changeCar(car)">
       {{ !car.liked ? "Like" : "Dislike" }}
     </button>
-    <button class="card-actions-link details">Details</button>
+    <button class="card-actions-link details">
+      <a routerLink="details/{{ car.id }}">Details</a>
+    </button>
   </mat-card-actions>
 </mat-card>

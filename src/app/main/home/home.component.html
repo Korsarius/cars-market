@@ -1,10 +1,11 @@
 <div class="home-wrapper">
   <section class="cars-i-like">
     <h4>Cars I like</h4>
-    <p class="default-text" *ngIf="!likedCar">
+    <p class="default-text" *ngIf="!likedCar && loaded">
       You haven't liked any cars yet.
     </p>
     <div class="card-wrapper">
+      <mat-spinner *ngIf="!loaded" class="spinner"></mat-spinner>
       <div *ngFor="let car of cars">
         <div *ngIf="car.liked" [ngClass]="{ 'small-card': car.liked }">
           <app-card class="card" [car]="car" [showButtons]="false"></app-card>
@@ -14,14 +15,32 @@
   </section>
   <section class="my-cars">
     <h4>My Cars</h4>
-    <p class="default-text">You haven't added any cars yet.</p>
+    <p class="default-text" *ngIf="!newCars.length && loaded">
+      You haven't added any cars yet.
+    </p>
+    <mat-list *ngIf="newCars.length" #newCarsList role="list">
+      <mat-list-item
+        class="newCars"
+        role="listitem"
+        *ngFor="let car of newCars"
+      >
+        <mat-list-item-content class="new-car-info-wrapper">
+          <p class="car-name">{{ car.brand }}</p>
+          <div class="car-info">
+            <span>{{ car.model }}</span>
+            <span>{{ car.creationDate | date: "MM/dd/yyyy HH:mm" }}</span>
+          </div>
+        </mat-list-item-content>
+      </mat-list-item>
+    </mat-list>
+    <mat-spinner *ngIf="!loaded" class="spinner my-cars-spinner"></mat-spinner>
   </section>
   <section class="my-dealers">
     <h4>My Dealers</h4>
-    <p class="default-text" *ngIf="newDealers.length === 0">
+    <p class="default-text" *ngIf="!newDealers.length && loaded">
       You haven't added any dealers yet.
     </p>
-    <mat-list *ngIf="newDealers.length > 0" #dealersList role="list">
+    <mat-list *ngIf="newDealers.length" #dealersList role="list">
       <mat-list-item
         class="dealer"
         role="listitem"
@@ -31,16 +50,21 @@
           <p class="dealer-name">{{ dealer.name }}</p>
           <div class="dealer-info">
             <span>{{ dealer.country }}</span>
-            <span>{{ dealer.registrationDate | date: "MM/dd/yyyy HH:mm" }}</span>
+            <span>{{
+              dealer.registrationDate | date: "MM/dd/yyyy HH:mm"
+            }}</span>
           </div>
         </mat-list-item-content>
       </mat-list-item>
     </mat-list>
+    <mat-spinner *ngIf="!loaded" class="spinner my-dealers-spinner"></mat-spinner>
   </section>
   <section class="actions">
     <button mat-raised-button color="accent" (click)="openCarDialog()">
       Add Car
     </button>
-    <button mat-raised-button color="primary" (click)="openDealerDialog()">Add Dealer</button>
+    <button mat-raised-button color="primary" (click)="openDealerDialog()">
+      Add Dealer
+    </button>
   </section>
 </div>

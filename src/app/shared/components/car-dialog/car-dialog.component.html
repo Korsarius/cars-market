@@ -1,52 +1,5 @@
-<p>car-dialog works!</p>
-
 <!-- Form Group, Form Control -->
-
-<!-- <form [formGroup]="addDealerForm" class="add-dealer-form">
-    <mat-form-field class="full-width">
-      <mat-label>Id *</mat-label>
-      <input type="text" matInput formControlName="id" />
-      <mat-error *ngIf="idNameFormControl.hasError('required')">
-        Id is <strong>required</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Name *</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="name"
-        placeholder="Ex. Ford"
-      />
-      <mat-error *ngIf="idNameFormControl.hasError('required')">
-        Name is <strong>required</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Headquarters</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="headquarters"
-        placeholder="Ex. Dearborn, Michigan"
-      />
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Country</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="country"
-        placeholder="Ex. United States"
-      />
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Founded in</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="foundedIn"
-        placeholder="Ex. 1903"
-      />
-    </mat-form-field>
-  </form> -->
+<div class="car-dialog-wrapper">
+  <h1>Add Car</h1>
+  <app-car-form (addNewCar)="saveCar($event)" (closeDialog)="close()"></app-car-form>
+</div>

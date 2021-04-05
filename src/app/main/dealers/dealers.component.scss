@@ -42,3 +42,11 @@ th {
 .delete-btn:hover {
   color: $bc-purple;
 }
+
+.mat-elevation-z8 {
+  display: flex;
+  flex-direction: column;
+  .spinner {
+    align-self: center;
+  }
+}

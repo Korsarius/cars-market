@@ -1,3 +1,5 @@
+import { debounceTime, delay } from 'rxjs/operators';
+
 import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 
 import { MatPaginator } from '@angular/material/paginator';
@@ -8,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { IDealer } from './IDealer';
 import { DealersService } from './dealers.service';
 import { DealerDialogComponent } from '../../shared/components/dealer-dialog/dealer-dialog.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-dealers',
@@ -31,6 +34,7 @@ export class DealersComponent implements OnInit {
   dealers: IDealer[];
 
   dialogValue: IDealer;
+  loaded: boolean = false;
 
   constructor(
     private dealerService: DealersService,
@@ -39,7 +43,8 @@ export class DealersComponent implements OnInit {
 
   ngOnInit(): void {
     // Assign the data to the data source for the table to render
-    this.dealerService.getDealers().subscribe((dealers) => {
+    this.dealerService.getDealers().pipe(delay(1000)).subscribe((dealers) => {
+      this.loaded = true;
       this.dealers = dealers;
       this.dataSource = new MatTableDataSource(this.dealers);
       this.dataSource.paginator = this.paginator;
@@ -66,6 +71,13 @@ export class DealersComponent implements OnInit {
     }
   }
 
+  clearFilter(): void {
+    this.dataSource.filter = '';
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   openDialog(dealer: IDealer | null = null): void {
     const dialogRef = this.dialog.open(DealerDialogComponent, {
       data: { dealer },
@@ -82,8 +94,13 @@ export class DealersComponent implements OnInit {
     });
   }
 
-  deleteDealer(dealer: IDealer): void {
-    this.dealerService.deleteDealer(dealer).subscribe();
-    this.updateTable();
+  openConfirmDialog(dealer: IDealer): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.afterClosed().subscribe((isDelete) => {
+      if (isDelete) {
+        this.dealerService.deleteDealer(dealer).subscribe();
+        this.updateTable();
+      }
+    });
   }
 }

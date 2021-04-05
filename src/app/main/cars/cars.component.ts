@@ -1,5 +1,4 @@
-import { combineLatest, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, delay } from 'rxjs/operators';
 
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -26,8 +25,10 @@ export class CarsComponent implements OnInit {
   selectedCar: ICar;
   startIndex: number = 0;
   endIndex: number = 8;
+  loaded: boolean = false;
 
   filterControl: FormControl = new FormControl();
+  shownButtons: boolean = false;
 
   constructor(private carService: CarsService) {}
 
@@ -37,9 +38,11 @@ export class CarsComponent implements OnInit {
   }
 
   handleFilter(): void {
+    // this.loaded = false;
     this.filterControl.valueChanges
-      .pipe(debounceTime(500))
+      .pipe(debounceTime(1000))
       .subscribe((value) => {
+        // this.loaded = true;
         if (value === '') {
           this.filteredCars = new Array<ICar>();
           this.trimmedCars = this.cars.slice(0, 8);
@@ -53,16 +56,25 @@ export class CarsComponent implements OnInit {
       });
   }
 
+  clearFilter(): void {
+    /**  Simulate server response delay */
+    setTimeout(() => (this.filteredCars = new Array<ICar>()), 500);
+  }
+
   getCars(): void {
-    this.carService.getCars().subscribe((cars) => {
-      this.cars = cars;
-      this.trimmedCars = this.cars.slice(this.startIndex, 8);
-      this.cars.forEach((item) =>
-        item.category
-          ? this.carsCategory.add(item.category)
-          : this.carsCategory.add('Other')
-      );
-    });
+    this.carService
+      .getCars()
+      .pipe(delay(1000))
+      .subscribe((cars) => {
+        this.loaded = true;
+        this.cars = cars;
+        this.trimmedCars = this.cars.slice(this.startIndex, 8);
+        this.cars.forEach((item) =>
+          item.category
+            ? this.carsCategory.add(item.category)
+            : this.carsCategory.add('Other')
+        );
+      });
   }
 
   loadMore(): void {
@@ -87,6 +99,8 @@ export class CarsComponent implements OnInit {
   }
 
   getCarsOnCategory(category: MatTabChangeEvent): void {
+    // this.loaded = false;
+    // setTimeout(() => (this.loaded = true), 1000);
     this.selectedCarsOnCategory = this.cars.filter(
       (item) => item.category === category.tab.textLabel.toLowerCase()
     );

@@ -6,7 +6,7 @@ export interface IDealer {
   foundedIn: number;
   newRecord?: boolean;
   headquarters: string;
-  registrationDate?: string;
+  registrationDate?: Date | string;
 }
 
 export const initDealer = (): IDealer => ({

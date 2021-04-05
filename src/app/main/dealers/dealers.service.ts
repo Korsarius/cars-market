@@ -56,7 +56,7 @@ export class DealersService {
       .pipe(catchError(this.handleError<IDealer>('addDealer')));
   }
 
-  /** PUT: update the hero on the server */
+  /** PUT: update the dealer on the server */
   public updateDealer(dealer: IDealer): Observable<any> {
     return this.http
       .put(this.dealersUrl, dealer, this.httpOptions)

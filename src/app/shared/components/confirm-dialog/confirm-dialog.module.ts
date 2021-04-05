@@ -6,24 +6,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-import { CarFormModule } from '../car-form/car-form.module';
-import { CarDialogComponent } from './car-dialog.component';
+import { ConfirmDialogComponent } from './confirm-dialog.component';
 
 @NgModule({
-  declarations: [CarDialogComponent],
+  declarations: [ConfirmDialogComponent],
   imports: [
     CommonModule,
-    // FormsModule,
-    // MatButtonModule,
+    FormsModule,
     MatDialogModule,
-    // MatFormFieldModule,
-    // MatInputModule,
-    // MatAutocompleteModule,
-    // ReactiveFormsModule,
-    CarFormModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule,
   ],
-  exports: [CarDialogComponent],
+  exports: [ConfirmDialogComponent],
 })
-export class CarDialogModule {}
+export class ConfirmDialogModule {}
