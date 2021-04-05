@@ -94,10 +94,10 @@ export class CarFormComponent implements OnInit {
         this.addCarForm.controls.dealer.value.id ||
         this.addCarForm.controls.dealer.value,
       ...this.addCarForm.value,
-      creationDate: car.creationDate ? car.creationDate : new Date(),
+      creationDate: car && car.creationDate ? car.creationDate : new Date(),
       liked: false,
-      newItem: car.newItem ? false : true,
-      id: car.id ? car.id : this.randomId(),
+      newItem: car && car.newItem ? false : true,
+      id: car &&  car.id ? car.id : this.randomId(),
     };
     delete newCar.dealer;
     if (car) {
