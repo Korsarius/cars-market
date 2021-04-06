@@ -43,7 +43,6 @@ export class HomeComponent implements OnInit {
       .subscribe((cars) => {
         this.loaded = true;
         this.likedCar = cars.find((car: ICar) => car.liked);
-        console.log('this.likedCar: ', this.likedCar);
         this.cars = cars.filter((car: ICar) => car.liked);
         this.newCars = cars.filter((car: ICar) => car.creationDate);
       });
@@ -83,8 +82,6 @@ export class HomeComponent implements OnInit {
         this.carDialogValue = result.data;
         this.carService.addCar(this.carDialogValue).subscribe((car) => {
           this.newCars.push(car);
-          console.log('this.newCars: ', this.newCars);
-          console.log('this.newCars[0].image: ', this.newCars[0].image);
         });
       }
     });

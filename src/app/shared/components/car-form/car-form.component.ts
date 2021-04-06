@@ -1,3 +1,5 @@
+import { tap } from 'rxjs/operators';
+
 import { Location } from '@angular/common';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -16,10 +18,12 @@ import { ICar } from '../../../main/cars/ICar';
 export class CarFormComponent implements OnInit {
   @Output() addNewCar = new EventEmitter<ICar>();
   @Output() closeDialog = new EventEmitter();
+  @Input() car: ICar;
+  @Output() isEdit = new EventEmitter<boolean>();
+  @Output() updatedCar = new EventEmitter<ICar>();
 
   addCarForm: FormGroup;
 
-  @Input() car: ICar;
   cars: ICar[] = new Array<ICar>();
   dealers: IDealer[];
   shownError: boolean = false;
@@ -55,6 +59,20 @@ export class CarFormComponent implements OnInit {
       description: new FormControl(this.car ? this.car.description : ''),
       image: new FormControl(),
     });
+
+    this.addCarForm.controls.dealer.valueChanges
+      .pipe(
+        tap((value) => {
+          this.shownError =
+            value &&
+            this.dealers &&
+            !this.dealers.find(
+              (el) => el.name.toLowerCase() === value.toString().toLowerCase()
+            );
+          console.log(value);
+        })
+      )
+      .subscribe();
   }
 
   selectDealer(dealerOption: any): void {
@@ -65,15 +83,12 @@ export class CarFormComponent implements OnInit {
     this.addCarForm.controls.dealer.setValue(dealerOption.option.value.name);
   }
 
-  check(value: string): void {
-    this.shownError = !this.dealers.find(
-      (item) => item.name.toLowerCase() === value.toLowerCase()
-    );
-    console.log('this.shownError: ', this.shownError);
-  }
-
   close(): void {
     this.closeDialog.emit();
+    if (this.car) {
+      this.router.navigate(['cars', 'details', `${this.car.id}`]);
+    }
+    this.isEdit.emit(false);
   }
 
   randomId(): string {
@@ -88,7 +103,6 @@ export class CarFormComponent implements OnInit {
   }
 
   saveCar(car?: ICar): void {
-    console.log('car: ', car);
     const newCar: ICar | any = {
       brand:
         this.addCarForm.controls.dealer.value.id ||
@@ -97,17 +111,25 @@ export class CarFormComponent implements OnInit {
       creationDate: car && car.creationDate ? car.creationDate : new Date(),
       liked: false,
       newItem: car && car.newItem ? false : true,
-      id: car &&  car.id ? car.id : this.randomId(),
+      id: car && car.id ? car.id : this.randomId(),
+      image:
+        !this.addCarForm.controls.image.value && this.car && this.car.image
+          ? this.car.image
+          : this.addCarForm.controls.image.value,
     };
     delete newCar.dealer;
     if (car) {
       car = newCar;
-      console.log('car: ', car);
-      // this.router.navigate([`cars/${car.id}`]);
-      this.location.back();
+      this.isEdit.emit(false);
+      this.updatedCar.emit(car);
+      this.router.navigate(['cars', 'details', `${this.car.id}`]);
       this.carService.updateCar(car).subscribe();
     } else {
-      console.log('newCar: ', newCar);
+      const updatedDealer: IDealer = this.dealers.find(
+        (dealer) => dealer.id === newCar.brand.toUpperCase()
+      );
+      updatedDealer.amountOfCars++;
+      this.dealerService.updateDealer(updatedDealer).subscribe();
       this.addNewCar.emit(newCar);
     }
   }

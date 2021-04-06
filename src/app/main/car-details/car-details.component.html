@@ -44,5 +44,5 @@
       </li>
     </ul>
   </div>
-  <app-car-form *ngIf="isEdit" [car]="car"></app-car-form>
+  <app-car-form *ngIf="isEdit" [car]="car" (isEdit)="isEdit = $event" (updatedCar)="car = $event"></app-car-form>
 </div>

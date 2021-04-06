@@ -37,23 +37,19 @@ export class CarDetailsComponent implements OnInit {
   }
 
   public getCar(): void {
-    // const id: string = this.route.snapshot.paramMap.get('id')!;
-    // this.carService.getCar(id).subscribe((car) => {
-    //   this.car = car;
-    //   this.router.url === `/cars/details/${this.car.id}`
-    //     ? (this.carDetailsPage = true)
-    //     : (this.carDetailsPage = false);
-    // });
     this.route.paramMap
       .pipe(
         switchMap((params: ParamMap) =>
           this.carService.getCar(params.get('id'))
         ),
-        delay(1000)
+        delay(100)
       )
       .subscribe((car) => {
         this.car = car;
         this.isLoaded = true;
+        if (this.router.url === `/cars/details/${this.car.id}/edit`) {
+          this.isEdit = true;
+        }
       });
   }
 
@@ -68,8 +64,7 @@ export class CarDetailsComponent implements OnInit {
   }
 
   openEditForm(): void {
-    // this.router.navigate([`cars/details/${this.car.id}/edit`]);
-    this.location.go(`/cars/details/${this.car.id}/edit`);
+    this.router.navigate(['cars', 'details', `${this.car.id}`, 'edit']);
     this.isEdit = true;
   }
 }

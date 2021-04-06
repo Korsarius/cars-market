@@ -49,25 +49,24 @@ export class CarsService {
 
   /** POST: add a new car to the server */
   public addCar(car: ICar): Observable<ICar> {
-    console.log('car: ', car);
     return this.http
       .post<ICar>(this.carsUrl, car, this.httpOptions)
       .pipe(catchError(this.handleError<ICar>('addCar')));
   }
 
-    /** DELETE: delete the car from the server */
-    deleteCar(car: ICar | string): Observable<ICar> {
-      const id: string = typeof car === 'string' ? car : car.id;
-      const url: string = `${this.carsUrl}/${id}`;
-      return this.http
-        .delete<ICar>(url, this.httpOptions)
-        .pipe(catchError(this.handleError<ICar>('deleteCar')));
-    }
+  /** DELETE: delete the car from the server */
+  deleteCar(car: ICar | string): Observable<ICar> {
+    const id: string = typeof car === 'string' ? car : car.id;
+    const url: string = `${this.carsUrl}/${id}`;
+    return this.http
+      .delete<ICar>(url, this.httpOptions)
+      .pipe(catchError(this.handleError<ICar>('deleteCar')));
+  }
 
   public getCar(id: string): Observable<ICar> {
     const url: string = `${this.carsUrl}/${id}`;
-    return this.http.get<ICar>(url).pipe(
-      catchError(this.handleError<ICar>(`getCar id=${id}`))
-    );
+    return this.http
+      .get<ICar>(url)
+      .pipe(catchError(this.handleError<ICar>(`getCar id=${id}`)));
   }
 }

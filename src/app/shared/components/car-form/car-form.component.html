@@ -13,7 +13,6 @@
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Dealer *</mat-label>
-      <!-- (keyup)="check(dealerInput.value)" -->
       <input
         type="text"
         matInput
@@ -25,7 +24,7 @@
       <mat-error *ngIf="addCarForm.controls.dealer.hasError('required')">
         Dealer is <strong>required</strong>
       </mat-error>
-      <mat-hint *ngIf="shownError">
+      <mat-hint *ngIf="shownError" class="error">
         There is no such <strong>dealer</strong>
       </mat-hint>
       <mat-autocomplete
@@ -78,8 +77,9 @@
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Description</mat-label>
+      <!-- class="car-description" -->
       <textarea
-        class="car-description"
+      [ngClass]="{'car-description' : isEdit}"
         matInput
         formControlName="description"
         placeholder="Some information about the car"
