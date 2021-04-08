@@ -76,6 +76,18 @@
   }
 }
 
+.go-back-btn-wrapper {
+  position: absolute;
+  left: 45%;
+  bottom: 0;
+  margin-bottom: 15px;
+  button:hover {
+    color: $txt-c-lightpurple;
+    background-color: $bc-white;
+    border: 1px solid $b-c-purple;
+  }
+}
+
 .spinner {
   margin: 100px 0 0 120px;
 }

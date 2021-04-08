@@ -7,7 +7,9 @@ import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ICar } from './../cars/ICar';
+import { IDealer } from './../dealers/IDealer';
 import { CarsService } from '../cars/cars.service';
+import { DealersService } from './../dealers/dealers.service';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -19,18 +21,25 @@ export class CarDetailsComponent implements OnInit {
   @Input() car: ICar;
   @Input() carDetailsPage: boolean = true;
 
+  dealers: IDealer[];
+
   isLoaded: boolean = false;
   isEdit: boolean = false;
+  isCarDetails: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private carService: CarsService,
+    private dealerService: DealersService,
     public router: Router,
     public dialog: MatDialog,
     public location: Location
   ) {}
 
   ngOnInit(): void {
+    this.dealerService
+      .getDealers()
+      .subscribe((dealers) => (this.dealers = dealers));
     if (!this.car) {
       this.getCar();
     }
@@ -50,6 +59,9 @@ export class CarDetailsComponent implements OnInit {
         if (this.router.url === `/cars/details/${this.car.id}/edit`) {
           this.isEdit = true;
         }
+        this.router.url === `/cars/details/${this.car.id}`
+          ? (this.isCarDetails = true)
+          : (this.isCarDetails = false);
       });
   }
 
@@ -57,6 +69,11 @@ export class CarDetailsComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
     dialogRef.afterClosed().subscribe((isDelete) => {
       if (isDelete) {
+        const updatedDealer: IDealer = this.dealers.find(
+          (dealer) => dealer.name.toLowerCase() === car.brand.toLowerCase()
+        );
+        updatedDealer.amountOfCars--;
+        this.dealerService.updateDealer(updatedDealer).subscribe();
         this.carService.deleteCar(car).subscribe();
         this.router.navigate(['cars']);
       }

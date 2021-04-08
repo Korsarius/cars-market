@@ -1,6 +1,7 @@
+import { Subscription } from 'rxjs';
 import { debounceTime, delay } from 'rxjs/operators';
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -13,7 +14,7 @@ import { CarsService } from './cars.service';
   templateUrl: './cars.component.html',
   styleUrls: ['./cars.component.scss'],
 })
-export class CarsComponent implements OnInit {
+export class CarsComponent implements OnInit, OnDestroy {
   @Input() car?: ICar;
 
   cars: ICar[] = new Array<ICar>();
@@ -26,9 +27,12 @@ export class CarsComponent implements OnInit {
   startIndex: number = 0;
   endIndex: number = 8;
   loaded: boolean = false;
+  notFound: boolean = false;
 
   filterControl: FormControl = new FormControl();
   shownButtons: boolean = false;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(private carService: CarsService) {}
 
@@ -38,43 +42,53 @@ export class CarsComponent implements OnInit {
   }
 
   handleFilter(): void {
-    // this.loaded = false;
-    this.filterControl.valueChanges
-      .pipe(debounceTime(1000))
-      .subscribe((value) => {
-        // this.loaded = true;
-        if (value === '') {
-          this.filteredCars = new Array<ICar>();
-          this.trimmedCars = this.cars.slice(0, 8);
-        } else {
-          this.filteredCars = this.cars.filter(
-            (car) =>
-              car.brand.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
-              car.model.toLowerCase().indexOf(value.toLowerCase()) !== -1
-          );
-        }
-      });
+    this.subscriptions.push(
+      this.filterControl.valueChanges
+        .pipe(debounceTime(1000))
+        .subscribe((value) => {
+          if (value === '') {
+            this.filteredCars = new Array<ICar>();
+            this.trimmedCars = this.cars.slice(0, 8);
+          } else {
+            this.filteredCars = this.cars.filter(
+              (car) =>
+                car.brand.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
+                car.model.toLowerCase().indexOf(value.toLowerCase()) !== -1
+            );
+            this.filteredCars.length === 0
+              ? (this.notFound = true)
+              : (this.notFound = false);
+            this.trimmedCars = new Array<ICar>();
+          }
+        })
+    );
   }
 
   clearFilter(): void {
     /**  Simulate server response delay */
-    setTimeout(() => (this.filteredCars = new Array<ICar>()), 500);
+    setTimeout(() => {
+      this.notFound = false;
+      this.filteredCars = new Array<ICar>();
+      this.trimmedCars = this.cars.slice(0, 8);
+    }, 500);
   }
 
   getCars(): void {
-    this.carService
-      .getCars()
-      .pipe(delay(1000))
-      .subscribe((cars) => {
-        this.loaded = true;
-        this.cars = cars;
-        this.trimmedCars = this.cars.slice(this.startIndex, 8);
-        this.cars.forEach((item) =>
-          item.category
-            ? this.carsCategory.add(item.category)
-            : this.carsCategory.add('Other')
-        );
-      });
+    this.subscriptions.push(
+      this.carService
+        .getCars()
+        .pipe(delay(1000))
+        .subscribe((cars) => {
+          this.loaded = true;
+          this.cars = cars;
+          this.trimmedCars = this.cars.slice(this.startIndex, 8);
+          this.cars.forEach((item) =>
+            item.category
+              ? this.carsCategory.add(item.category)
+              : this.carsCategory.add('Other')
+          );
+        })
+    );
   }
 
   loadMore(): void {
@@ -99,8 +113,6 @@ export class CarsComponent implements OnInit {
   }
 
   getCarsOnCategory(category: MatTabChangeEvent): void {
-    // this.loaded = false;
-    // setTimeout(() => (this.loaded = true), 1000);
     this.selectedCarsOnCategory = this.cars.filter(
       (item) => item.category === category.tab.textLabel.toLowerCase()
     );
@@ -117,5 +129,9 @@ export class CarsComponent implements OnInit {
   likeOrDislikeCar(car: ICar): void {
     car.liked = !car.liked;
     this.carService.updateCar(car).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

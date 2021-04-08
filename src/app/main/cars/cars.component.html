@@ -9,10 +9,16 @@
         placeholder="Ex. Ford"
         [formControl]="filterControl"
       />
-      <button mat-button *ngIf="filterInput.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter(); filterInput.value = ''">
+      <button
+        mat-button
+        *ngIf="filterInput.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="clearFilter(); filterInput.value = ''"
+      >
         <mat-icon>close</mat-icon>
       </button>
-      <!-- (focus)="foundCars.length === 0 ? filterInput.style.backgroundColor = 'red' && filterInput.value = 'Not Found Any Car' : ''" -->
     </mat-form-field>
   </form>
   <div>
@@ -51,10 +57,16 @@
       </mat-list-option>
     </mat-selection-list>
   </div>
-  <app-car-details [carDetailsPage]="shownButtons" [car]="selectedCar"></app-car-details>
+  <app-car-details
+    [carDetailsPage]="shownButtons"
+    [car]="selectedCar"
+  ></app-car-details>
 </section>
 <!-- If toggle === false -->
-<section class="cars" *ngIf="!categoryView">
+<div *ngIf="notFound" class="not-found">
+  <span><strong>Cars Not Found</strong></span>
+</div>
+<section class="cars" *ngIf="!categoryView && !notFound">
   <mat-spinner *ngIf="!loaded" class="spinner"></mat-spinner>
   <app-card
     class="card"
@@ -68,7 +80,7 @@
     class="load-more-btn"
     mat-raised-button
     color="accent"
-    *ngIf="cars.length"
+    *ngIf="trimmedCars.length > 7 && !notFound"
     (click)="cars.length !== trimmedCars.length ? loadMore() : rollUp()"
   >
     {{ cars.length === trimmedCars.length ? "Roll Up" : "Load More" }}
