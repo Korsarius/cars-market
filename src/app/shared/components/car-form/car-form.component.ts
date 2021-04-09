@@ -1,8 +1,15 @@
 import { Observable, Subscription } from 'rxjs';
-import { tap, switchMap } from 'rxjs/operators';
+import { tap, switchMap, takeWhile } from 'rxjs/operators';
 
 import { Location } from '@angular/common';
-import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  Input,
+  OnDestroy,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -38,6 +45,7 @@ export class CarFormComponent implements OnInit, OnDestroy {
   editForm: boolean = false;
 
   dealers$: Observable<IDealer[]>;
+  alive: boolean = true;
 
   constructor(
     private dealerService: DealersService,
@@ -54,9 +62,10 @@ export class CarFormComponent implements OnInit, OnDestroy {
       .getDealers()
       .pipe(tap((dealers) => (this.dealers = dealers)));
 
-    this.subscriptions.push(
-      this.carService.getCars().subscribe((cars) => (this.cars = cars))
-    );
+    this.carService
+      .getCars()
+      .pipe(takeWhile(() => this.alive))
+      .subscribe((cars) => (this.cars = cars));
 
     this.addCarForm = new FormGroup({
       model: new FormControl(
@@ -76,29 +85,27 @@ export class CarFormComponent implements OnInit, OnDestroy {
       image: new FormControl(this.car ? this.car.image : ''),
     });
 
-    this.subscriptions.push(
-      this.addCarForm.controls.dealer.valueChanges
-        .pipe(
-          tap((value) => {
-            this.shownError =
-              value &&
-              this.dealers &&
-              !this.dealers.find(
-                (el) => el.name.toLowerCase() === value.toString().toLowerCase()
-              );
-          })
-        )
-        .subscribe()
-    );
-    this.subscriptions.push(
-      this.addCarForm.controls.image.valueChanges
-        .pipe(
-          tap((value) => {
-            this.shownWarning = !value.match(IMAGE_REGEXP);
-          })
-        )
-        .subscribe()
-    );
+    this.addCarForm.controls.dealer.valueChanges
+      .pipe(
+        takeWhile(() => this.alive),
+        tap((value) => {
+          this.shownError =
+            value &&
+            this.dealers &&
+            !this.dealers.find(
+              (el) => el.name.toLowerCase() === value.toString().toLowerCase()
+            );
+        })
+      )
+      .subscribe();
+    this.addCarForm.controls.image.valueChanges
+      .pipe(
+        takeWhile(() => this.alive),
+        tap((value) => {
+          this.shownWarning = !value.match(IMAGE_REGEXP);
+        })
+      )
+      .subscribe();
     this.car && this.router.url === `/cars/details/${this.car.id}/edit`
       ? (this.editForm = true)
       : (this.editForm = false);
@@ -142,7 +149,7 @@ export class CarFormComponent implements OnInit, OnDestroy {
       ...this.addCarForm.value,
       creationDate: car && car.creationDate ? car.creationDate : new Date(),
       liked: false,
-      newItem: car && car.newItem ? false : true,
+      newItem: car ? car.newItem : true,
       id: car && car.id ? car.id : this.randomId(),
       image:
         !this.addCarForm.controls.image.value && this.car && this.car.image
@@ -161,18 +168,26 @@ export class CarFormComponent implements OnInit, OnDestroy {
       this.isEdit.emit(false);
       this.updatedCar.emit(car);
       this.router.navigate(['cars', 'details', `${this.car.id}`]);
-      this.subscriptions.push(this.carService.updateCar(car).subscribe());
+      this.carService
+        .updateCar(car)
+        .pipe(takeWhile(() => this.alive))
+        .subscribe();
     } else {
       const updatedDealer: IDealer = this.dealers.find(
         (dealer) => dealer.id === newCar.brand.toUpperCase()
       );
       updatedDealer.amountOfCars++;
-      this.subscriptions.push(this.dealerService.updateDealer(updatedDealer).subscribe());
+      this.subscriptions.push(
+        this.dealerService
+          .updateDealer(updatedDealer)
+          .pipe(takeWhile(() => this.alive))
+          .subscribe()
+      );
       this.addNewCar.emit(newCar);
     }
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.alive = false;
   }
 }

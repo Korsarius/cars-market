@@ -1,6 +1,6 @@
-import { switchMap, delay } from 'rxjs/operators';
+import { switchMap, delay, takeWhile } from 'rxjs/operators';
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -17,7 +17,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
   templateUrl: './car-details.component.html',
   styleUrls: ['./car-details.component.scss'],
 })
-export class CarDetailsComponent implements OnInit {
+export class CarDetailsComponent implements OnInit, OnDestroy {
   @Input() car: ICar;
   @Input() carDetailsPage: boolean = true;
 
@@ -26,6 +26,7 @@ export class CarDetailsComponent implements OnInit {
   isLoaded: boolean = false;
   isEdit: boolean = false;
   isCarDetails: boolean = false;
+  isAlive: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,6 +40,7 @@ export class CarDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.dealerService
       .getDealers()
+      .pipe(takeWhile(() => this.isAlive))
       .subscribe((dealers) => (this.dealers = dealers));
     if (!this.car) {
       this.getCar();
@@ -48,6 +50,7 @@ export class CarDetailsComponent implements OnInit {
   public getCar(): void {
     this.route.paramMap
       .pipe(
+        takeWhile(() => this.isAlive),
         switchMap((params: ParamMap) =>
           this.carService.getCar(params.get('id'))
         ),
@@ -67,21 +70,34 @@ export class CarDetailsComponent implements OnInit {
 
   openConfirmDialog(car: ICar): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
-    dialogRef.afterClosed().subscribe((isDelete) => {
-      if (isDelete) {
-        const updatedDealer: IDealer = this.dealers.find(
-          (dealer) => dealer.name.toLowerCase() === car.brand.toLowerCase()
-        );
-        updatedDealer.amountOfCars--;
-        this.dealerService.updateDealer(updatedDealer).subscribe();
-        this.carService.deleteCar(car).subscribe();
-        this.router.navigate(['cars']);
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe((isDelete) => {
+        if (isDelete) {
+          const updatedDealer: IDealer = this.dealers.find(
+            (dealer) => dealer.name.toLowerCase() === car.brand.toLowerCase()
+          );
+          updatedDealer.amountOfCars--;
+          this.dealerService
+            .updateDealer(updatedDealer)
+            .pipe(takeWhile(() => this.isAlive))
+            .subscribe();
+          this.carService
+            .deleteCar(car)
+            .pipe(takeWhile(() => this.isAlive))
+            .subscribe();
+          this.router.navigate(['cars']);
+        }
+      });
   }
 
   openEditForm(): void {
     this.router.navigate(['cars', 'details', `${this.car.id}`, 'edit']);
     this.isEdit = true;
+  }
+
+  ngOnDestroy(): void {
+    this.isAlive = false;
   }
 }

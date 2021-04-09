@@ -1,6 +1,6 @@
-import { debounceTime, delay } from 'rxjs/operators';
+import { delay, takeWhile } from 'rxjs/operators';
 
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -17,7 +17,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
   templateUrl: './dealers.component.html',
   styleUrls: ['./dealers.component.scss'],
 })
-export class DealersComponent implements OnInit {
+export class DealersComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -35,6 +35,7 @@ export class DealersComponent implements OnInit {
 
   dialogValue: IDealer;
   loaded: boolean = false;
+  isAlive: boolean = false;
 
   constructor(
     private dealerService: DealersService,
@@ -43,23 +44,32 @@ export class DealersComponent implements OnInit {
 
   ngOnInit(): void {
     // Assign the data to the data source for the table to render
-    this.dealerService.getDealers().pipe(delay(1000)).subscribe((dealers) => {
-      this.loaded = true;
-      this.dealers = dealers;
-      this.dataSource = new MatTableDataSource(this.dealers);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+    this.dealerService
+      .getDealers()
+      .pipe(
+        takeWhile(() => this.isAlive),
+        delay(1000)
+      )
+      .subscribe((dealers) => {
+        this.loaded = true;
+        this.dealers = dealers;
+        this.dataSource = new MatTableDataSource(this.dealers);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
   }
 
   updateTable(): void {
     // Assign the new data to the data source for the table to render
-    this.dealerService.getDealers().subscribe((dealers) => {
-      this.dealers = dealers;
-      this.dataSource = new MatTableDataSource(this.dealers);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+    this.dealerService
+      .getDealers()
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe((dealers) => {
+        this.dealers = dealers;
+        this.dataSource = new MatTableDataSource(this.dealers);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
   }
 
   applyFilter(event: Event): void {
@@ -83,24 +93,37 @@ export class DealersComponent implements OnInit {
       data: { dealer },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.dialogValue = result.data;
-        result.data.newRecord
-          ? this.dealerService.addDealer(this.dialogValue).subscribe()
-          : this.dealerService.updateDealer(this.dialogValue).subscribe();
-        this.updateTable();
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe((result) => {
+        if (result) {
+          this.dialogValue = result.data;
+          result.data.newRecord
+            ? this.dealerService.addDealer(this.dialogValue).subscribe()
+            : this.dealerService.updateDealer(this.dialogValue).subscribe();
+          this.updateTable();
+        }
+      });
   }
 
   openConfirmDialog(dealer: IDealer): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
-    dialogRef.afterClosed().subscribe((isDelete) => {
-      if (isDelete) {
-        this.dealerService.deleteDealer(dealer).subscribe();
-        this.updateTable();
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe((isDelete) => {
+        if (isDelete) {
+          this.dealerService
+            .deleteDealer(dealer)
+            .pipe(takeWhile(() => this.isAlive))
+            .subscribe();
+          this.updateTable();
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.isAlive = false;
   }
 }

@@ -26,19 +26,19 @@
       <li>
         Dealers: <span>{{ car.brand }}</span>
       </li>
-      <li>
+      <li *ngIf="car.class">
         Class: <span>{{ car.class }}</span>
       </li>
-      <li>
+      <li *ngIf="car.year">
         Year: <span>{{ car.year }}</span>
       </li>
-      <li>
+      <li *ngIf="car.color">
         Color: <span>{{ car.color }}</span>
       </li>
-      <li>
+      <li *ngIf="car.transmission">
         Transmisson: <span>{{ car.transmission }}</span>
       </li>
-      <li>
+      <li *ngIf="car.description">
         <p class="car-description">{{ car.description }}</p>
       </li>
     </ul>

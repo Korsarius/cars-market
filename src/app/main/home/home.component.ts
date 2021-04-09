@@ -1,6 +1,6 @@
-import { debounceTime, delay } from 'rxjs/operators';
+import { delay, takeWhile } from 'rxjs/operators';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -16,7 +16,7 @@ import { DealersService } from '../dealers/dealers.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   cars: ICar[] | null = new Array<ICar>();
   newCars: ICar[] = new Array<ICar>();
   likedCar: ICar;
@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   dealerDialogValue: IDealer;
   newDealers: IDealer[] = new Array<IDealer>();
   loaded: boolean = false;
+  isAlive: boolean = true;
 
   constructor(
     private carService: CarsService,
@@ -39,18 +40,22 @@ export class HomeComponent implements OnInit {
   getCars(): void {
     this.carService
       .getCars()
-      .pipe(delay(1000))
+      .pipe(
+        takeWhile(() => this.isAlive),
+        delay(1000)
+      )
       .subscribe((cars) => {
         this.loaded = true;
         this.likedCar = cars.find((car: ICar) => car.liked);
         this.cars = cars.filter((car: ICar) => car.liked);
-        this.newCars = cars.filter((car: ICar) => car.creationDate);
+        this.newCars = cars.filter((car: ICar) => car.newItem);
       });
   }
 
   getDealers(): void {
     this.dealerService
       .getDealers()
+      .pipe(takeWhile(() => this.isAlive))
       .subscribe(
         (dealers) =>
           (this.newDealers = dealers.filter((dealer) => dealer.newRecord))
@@ -59,31 +64,50 @@ export class HomeComponent implements OnInit {
 
   dislikeCar(car: ICar): void {
     car.liked = !car.liked;
-    this.carService.updateCar(car).subscribe();
+    this.carService
+      .updateCar(car)
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe();
   }
 
   openDealerDialog(): void {
     const dialogRef = this.dialog.open(DealerDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.dealerDialogValue = result.data;
-        this.dealerService.addDealer(this.dealerDialogValue).subscribe();
-        this.getDealers();
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe((result) => {
+        if (result) {
+          this.dealerDialogValue = result.data;
+          this.dealerService
+            .addDealer(this.dealerDialogValue)
+            .pipe(takeWhile(() => this.isAlive))
+            .subscribe();
+          this.getDealers();
+        }
+      });
   }
 
   openCarDialog(): void {
     const dialogRef = this.dialog.open(CarDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.carDialogValue = result.data;
-        this.carService.addCar(this.carDialogValue).subscribe((car) => {
-          this.newCars.push(car);
-        });
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe((result) => {
+        if (result) {
+          this.carDialogValue = result.data;
+          this.carService
+            .addCar(this.carDialogValue)
+            .pipe(takeWhile(() => this.isAlive))
+            .subscribe((car) => {
+              this.newCars.push(car);
+            });
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.isAlive = false;
   }
 }
