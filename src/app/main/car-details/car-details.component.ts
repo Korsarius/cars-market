@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { switchMap, delay, takeWhile } from 'rxjs/operators';
 
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
@@ -20,13 +21,14 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 export class CarDetailsComponent implements OnInit, OnDestroy {
   @Input() car: ICar;
   @Input() carDetailsPage: boolean = true;
-
-  dealers: IDealer[];
+  @Input() dealers$: Observable<IDealer[]>;
 
   isLoaded: boolean = false;
   isEdit: boolean = false;
   isCarDetails: boolean = false;
   isAlive: boolean = true;
+
+  dealers: IDealer[];
 
   constructor(
     private route: ActivatedRoute,
@@ -38,9 +40,9 @@ export class CarDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.dealers$ = this.dealerService.getDealers().pipe();
     this.dealerService
       .getDealers()
-      .pipe(takeWhile(() => this.isAlive))
       .subscribe((dealers) => (this.dealers = dealers));
     if (!this.car) {
       this.getCar();
@@ -51,7 +53,7 @@ export class CarDetailsComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(
         takeWhile(() => this.isAlive),
-        switchMap((params: ParamMap) =>
+        switchMap((params: ParamMap) => 
           this.carService.getCar(params.get('id'))
         ),
         delay(100)

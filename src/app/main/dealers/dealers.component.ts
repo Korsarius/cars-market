@@ -1,6 +1,6 @@
-import { delay, takeWhile } from 'rxjs/operators';
+import { delay, take, takeWhile } from 'rxjs/operators';
 
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -8,7 +8,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
 import { IDealer } from './IDealer';
+import { ICar } from '../cars/ICar';
 import { DealersService } from './dealers.service';
+import { CarsService } from '../cars/cars.service';
 import { DealerDialogComponent } from '../../shared/components/dealer-dialog/dealer-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
@@ -17,7 +19,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
   templateUrl: './dealers.component.html',
   styleUrls: ['./dealers.component.scss'],
 })
-export class DealersComponent implements OnInit, OnDestroy {
+export class DealersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -32,13 +34,14 @@ export class DealersComponent implements OnInit, OnDestroy {
   ];
   dataSource: MatTableDataSource<IDealer>;
   dealers: IDealer[];
+  cars: ICar[];
 
   dialogValue: IDealer;
   loaded: boolean = false;
-  isAlive: boolean = false;
 
   constructor(
     private dealerService: DealersService,
+    private carService: CarsService,
     public dialog: MatDialog
   ) {}
 
@@ -46,10 +49,7 @@ export class DealersComponent implements OnInit, OnDestroy {
     // Assign the data to the data source for the table to render
     this.dealerService
       .getDealers()
-      .pipe(
-        takeWhile(() => this.isAlive),
-        delay(1000)
-      )
+      .pipe(delay(1000))
       .subscribe((dealers) => {
         this.loaded = true;
         this.dealers = dealers;
@@ -57,19 +57,17 @@ export class DealersComponent implements OnInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
+    this.carService.getCars().subscribe((cars) => (this.cars = cars));
   }
 
   updateTable(): void {
     // Assign the new data to the data source for the table to render
-    this.dealerService
-      .getDealers()
-      .pipe(takeWhile(() => this.isAlive))
-      .subscribe((dealers) => {
-        this.dealers = dealers;
-        this.dataSource = new MatTableDataSource(this.dealers);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      });
+    this.dealerService.getDealers().subscribe((dealers) => {
+      this.dealers = dealers;
+      this.dataSource = new MatTableDataSource(this.dealers);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
   }
 
   applyFilter(event: Event): void {
@@ -93,37 +91,29 @@ export class DealersComponent implements OnInit, OnDestroy {
       data: { dealer },
     });
 
-    dialogRef
-      .afterClosed()
-      .pipe(takeWhile(() => this.isAlive))
-      .subscribe((result) => {
-        if (result) {
-          this.dialogValue = result.data;
-          result.data.newRecord
-            ? this.dealerService.addDealer(this.dialogValue).subscribe()
-            : this.dealerService.updateDealer(this.dialogValue).subscribe();
-          this.updateTable();
-        }
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.dialogValue = result.data;
+        result.data.newRecord
+          ? this.dealerService.addDealer(this.dialogValue).subscribe()
+          : this.dealerService.updateDealer(this.dialogValue).subscribe();
+        this.updateTable();
+      }
+    });
   }
 
   openConfirmDialog(dealer: IDealer): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
-    dialogRef
-      .afterClosed()
-      .pipe(takeWhile(() => this.isAlive))
-      .subscribe((isDelete) => {
-        if (isDelete) {
-          this.dealerService
-            .deleteDealer(dealer)
-            .pipe(takeWhile(() => this.isAlive))
-            .subscribe();
-          this.updateTable();
-        }
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.isAlive = false;
+    dialogRef.afterClosed().subscribe((isDelete) => {
+      if (isDelete) {
+        this.dealerService.deleteDealer(dealer).subscribe();
+        this.updateTable();
+        this.cars.forEach((car) =>
+          car.brand === dealer.id
+            ? this.carService.deleteCar(car).pipe(take(1)).subscribe()
+            : ''
+        );
+      }
+    });
   }
 }

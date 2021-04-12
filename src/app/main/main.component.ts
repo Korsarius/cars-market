@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -10,10 +10,11 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class MainComponent implements OnInit {
   id: number;
+  defaultLink: HTMLElement;
   activeLink: HTMLElement;
   private routeSubscription: Subscription;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, public router: Router) {
     this.routeSubscription = route.params.subscribe();
   }
 

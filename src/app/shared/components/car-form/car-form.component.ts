@@ -32,19 +32,18 @@ export class CarFormComponent implements OnInit, OnDestroy {
   @Input() car: ICar;
   @Output() isEdit = new EventEmitter<boolean>();
   @Output() updatedCar = new EventEmitter<ICar>();
+  @Input() dealers: IDealer[];
 
   private subscriptions: Subscription[] = [];
 
   addCarForm: FormGroup;
 
   cars: ICar[] = new Array<ICar>();
-  dealers: IDealer[];
   shownError: boolean = false;
   shownWarning: boolean = false;
   // For style (adding class)
   editForm: boolean = false;
 
-  dealers$: Observable<IDealer[]>;
   alive: boolean = true;
 
   constructor(
@@ -55,13 +54,6 @@ export class CarFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // this.dealerService
-    //   .getDealers()
-    //   .subscribe((dealers) => (this.dealers = dealers));
-    this.dealers$ = this.dealerService
-      .getDealers()
-      .pipe(tap((dealers) => (this.dealers = dealers)));
-
     this.carService
       .getCars()
       .pipe(takeWhile(() => this.alive))
@@ -142,6 +134,24 @@ export class CarFormComponent implements OnInit, OnDestroy {
     this.addCarForm.controls.category.setValue(
       this.addCarForm.controls.category.value.toLowerCase()
     );
+    if (
+      car &&
+      this.addCarForm.controls.dealer.value.toUpperCase() !== car.brand
+    ) {
+      const lostCarDealer = this.dealers.find(
+        (dealer) => dealer.id === car.brand
+      );
+      const acquiredCarDealer = this.dealers.find(
+        (dealer) =>
+          dealer.id === this.addCarForm.controls.dealer.value.toUpperCase()
+      );
+      if (lostCarDealer && acquiredCarDealer) {
+        lostCarDealer.amountOfCars--;
+        acquiredCarDealer.amountOfCars++;
+        this.dealerService.updateDealer(lostCarDealer).subscribe();
+        this.dealerService.updateDealer(acquiredCarDealer).subscribe();
+      }
+    }
     const newCar: ICar | any = {
       brand:
         this.addCarForm.controls.dealer.value.id ||

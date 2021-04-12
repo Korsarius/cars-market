@@ -1,5 +1,5 @@
 <!-- Form Group, Form Control -->
 <div class="car-dialog-wrapper">
   <h1>Add Car</h1>
-  <app-car-form (addNewCar)="saveCar($event)" (closeDialog)="close()"></app-car-form>
+  <app-car-form (addNewCar)="saveCar($event)" [dealers]="dealers$ | async" (closeDialog)="close()"></app-car-form>
 </div>
