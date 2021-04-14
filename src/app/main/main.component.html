@@ -11,7 +11,7 @@
           [class.a-active]="link1 === activeLink"
           routerLink=""
           routerLinkActive="a-active"
-          [routerLinkActiveOptions]="{exact: true}"
+          [routerLinkActiveOptions]="{ exact: true }"
           (click)="onSelectLink(link1)"
           ><mat-icon aria-hidden="false" aria-label="home icon">home</mat-icon
           ><span>Home</span></a
@@ -20,7 +20,6 @@
           #link2
           [class.a-active]="link2 === activeLink"
           routerLinkActive="a-active"
-          [routerLinkActiveOptions]="{exact: true}"
           routerLink="/cars"
           (click)="onSelectLink(link2)"
           ><mat-icon aria-label="cars icon">directions_car</mat-icon>Cars</a
@@ -28,7 +27,7 @@
         <a
           #link3
           [class.a-active]="link3 === activeLink"
-          [routerLinkActiveOptions]="{exact: true}"
+          [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="a-active"
           routerLink="/dealers"
           (click)="onSelectLink(link3)"
