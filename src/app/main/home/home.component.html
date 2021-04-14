@@ -25,7 +25,7 @@
         *ngFor="let car of newCars"
       >
         <mat-list-item-content class="new-car-info-wrapper">
-          <p class="car-name">{{ car.brand }}</p>
+          <p class="car-name">{{ car.brand | titlecase}}</p>
           <div class="car-info">
             <span>{{ car.model }}</span>
             <span>{{ car.creationDate | date: "MM/dd/yyyy HH:mm" }}</span>

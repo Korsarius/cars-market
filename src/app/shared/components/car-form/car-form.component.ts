@@ -85,7 +85,8 @@ export class CarFormComponent implements OnInit, OnDestroy {
             value &&
             this.dealers &&
             !this.dealers.find(
-              (el) => el.name.toLowerCase() === value.toString().toLowerCase()
+              (delaer) =>
+                delaer.name.toLowerCase() === value.toString().toLowerCase()
             );
         })
       )
@@ -152,10 +153,11 @@ export class CarFormComponent implements OnInit, OnDestroy {
         this.dealerService.updateDealer(acquiredCarDealer).subscribe();
       }
     }
+    const dealerName: string = this.dealers.find(
+      (dealer) => dealer.name === this.addCarForm.controls.dealer.value
+    ).name;
     const newCar: ICar | any = {
-      brand:
-        this.addCarForm.controls.dealer.value.id ||
-        this.addCarForm.controls.dealer.value,
+      brand: dealerName,
       ...this.addCarForm.value,
       creationDate: car && car.creationDate ? car.creationDate : new Date(),
       liked: false,
@@ -184,7 +186,7 @@ export class CarFormComponent implements OnInit, OnDestroy {
         .subscribe();
     } else {
       const updatedDealer: IDealer = this.dealers.find(
-        (dealer) => dealer.id === newCar.brand.toUpperCase()
+        (dealer) => dealer.name.toLowerCase() === newCar.brand.toLowerCase()
       );
       updatedDealer.amountOfCars++;
       this.subscriptions.push(

@@ -44,6 +44,7 @@ export class CarDetailsComponent implements OnInit, OnDestroy {
     this.dealers$ = this.dealerService
       .getDealers()
       .pipe(tap((dealers) => (this.dealers = dealers)));
+    setTimeout(() => (this.isLoaded = true), 500);
     if (!this.car) {
       this.getCar();
     }
@@ -102,8 +103,8 @@ export class CarDetailsComponent implements OnInit, OnDestroy {
   }
 
   openEditForm(): void {
-    this.router.navigate(['cars', 'details', `${this.car.id}`, 'edit']);
     this.isEdit = true;
+    this.router.navigate(['cars', 'details', `${this.car.id}`, 'edit']);
   }
 
   ngOnDestroy(): void {
