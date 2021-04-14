@@ -18,7 +18,7 @@ import { DealersService } from './../dealers/dealers.service';
 })
 export class CarsComponent implements OnInit, OnDestroy {
   @Input() car?: ICar;
-  
+
   cars: ICar[] = new Array<ICar>();
   dealers: IDealer[];
   trimmedCars: ICar[] = new Array<ICar>();
@@ -59,6 +59,7 @@ export class CarsComponent implements OnInit, OnDestroy {
       .subscribe((value) => {
         if (value === '') {
           this.filteredCars = new Array<ICar>();
+          this.notFound = this.filteredCars.length !== 0;
           this.trimmedCars = this.cars.slice(0, 8);
         } else {
           this.filteredCars = this.cars.filter(
@@ -66,9 +67,7 @@ export class CarsComponent implements OnInit, OnDestroy {
               car.brand.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
               car.model.toLowerCase().indexOf(value.toLowerCase()) !== -1
           );
-          this.filteredCars.length === 0
-            ? (this.notFound = true)
-            : (this.notFound = false);
+          this.notFound = this.filteredCars.length === 0;
           this.trimmedCars = new Array<ICar>();
         }
       });

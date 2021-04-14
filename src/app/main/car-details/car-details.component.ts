@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { switchMap, delay, takeWhile } from 'rxjs/operators';
 
@@ -53,22 +53,27 @@ export class CarDetailsComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(
         takeWhile(() => this.isAlive),
-        switchMap((params: ParamMap) =>
-          this.carService.getCar(params.get('id'))
-        ),
+        switchMap((params: ParamMap) => {
+          const car: Observable<ICar> = this.carService.getCar(
+            params.get('id')
+          );
+          const dealers: Observable<
+            IDealer[]
+          > = this.dealerService.getDealers();
+          return forkJoin([car, dealers]);
+        }),
         delay(100)
       )
-      .subscribe((car) => {
+      .subscribe(([car, dealers]) => {
         this.car = car;
-        this.car.brand =
-          this.car.brand.slice(0, 1) + this.car.brand.slice(1).toLowerCase();
+        this.dealers = dealers;
+        const dealerName: string = this.dealers.find(
+          (dealer) => dealer.id === this.car.brand
+        ).name;
+        this.car.brand = dealerName;
         this.isLoaded = true;
-        if (this.router.url === `/cars/details/${this.car.id}/edit`) {
-          this.isEdit = true;
-        }
-        this.router.url === `/cars/details/${this.car.id}`
-          ? (this.isCarDetails = true)
-          : (this.isCarDetails = false);
+        this.isEdit = this.router.url === `/cars/details/${this.car.id}/edit`;
+        this.isCarDetails = this.router.url === `/cars/details/${this.car.id}`;
       });
   }
 
