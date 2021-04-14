@@ -69,7 +69,7 @@ export class CarDetailsComponent implements OnInit, OnDestroy {
         this.car = car;
         this.dealers = dealers;
         const dealerName: string = this.dealers.find(
-          (dealer) => dealer.id === this.car.brand
+          (dealer) => dealer.name.toLowerCase() === this.car.brand.toLowerCase()
         ).name;
         this.car.brand = dealerName;
         this.isLoaded = true;

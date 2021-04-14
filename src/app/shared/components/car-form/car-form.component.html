@@ -35,7 +35,7 @@
         *ngFor="let option of dealers"
         [value]="option || option.name"
       >
-        {{ option.name }}
+        {{ option.name | titlecase}}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

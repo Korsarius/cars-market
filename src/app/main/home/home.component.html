@@ -47,7 +47,7 @@
         *ngFor="let dealer of newDealers"
       >
         <mat-list-item-content class="dealer-info-wrapper">
-          <p class="dealer-name">{{ dealer.name }}</p>
+          <p class="dealer-name">{{ dealer.name | titlecase }}</p>
           <div class="dealer-info">
             <span>{{ dealer.country }}</span>
             <span>{{

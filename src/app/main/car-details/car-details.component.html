@@ -24,7 +24,7 @@
     </div>
     <ul class="car-properties" *ngIf="!isEdit">
       <li>
-        Dealer: <span>{{ car.brand }}</span>
+        Dealer: <span>{{ car.brand | titlecase}}</span>
       </li>
       <li *ngIf="car.class">
         Class: <span>{{ car.class }}</span>

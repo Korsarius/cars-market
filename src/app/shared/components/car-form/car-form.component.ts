@@ -164,7 +164,10 @@ export class CarFormComponent implements OnInit, OnDestroy {
       newItem: car ? car.newItem : true,
       id: car && car.id ? car.id : this.randomId(),
       image:
-        !this.addCarForm.controls.image.value && this.car && this.car.image
+        this.car &&
+        this.car.image &&
+        this.addCarForm.controls.image.value.match(IMAGE_REGEXP) &&
+        this.addCarForm.controls.image.value.match(IMAGE_ASSETS_REGEXP)
           ? this.car.image
           : this.addCarForm.controls.image.value,
     };
