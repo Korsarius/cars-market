@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { switchMap, delay, takeWhile } from 'rxjs/operators';
 
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
@@ -21,7 +22,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 export class CarDetailsComponent implements OnInit, OnDestroy {
   @Input() car: ICar;
   @Input() carDetailsPage: boolean = true;
-  @Input() dealers$: Observable<IDealer[]>;
+  dealers$: Observable<IDealer[]>;
 
   isLoaded: boolean = false;
   isEdit: boolean = false;
@@ -40,10 +41,9 @@ export class CarDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.dealers$ = this.dealerService.getDealers().pipe();
-    this.dealerService
+    this.dealers$ = this.dealerService
       .getDealers()
-      .subscribe((dealers) => (this.dealers = dealers));
+      .pipe(tap((dealers) => (this.dealers = dealers)));
     if (!this.car) {
       this.getCar();
     }
@@ -53,13 +53,15 @@ export class CarDetailsComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(
         takeWhile(() => this.isAlive),
-        switchMap((params: ParamMap) => 
+        switchMap((params: ParamMap) =>
           this.carService.getCar(params.get('id'))
         ),
         delay(100)
       )
       .subscribe((car) => {
         this.car = car;
+        this.car.brand =
+          this.car.brand.slice(0, 1) + this.car.brand.slice(1).toLowerCase();
         this.isLoaded = true;
         if (this.router.url === `/cars/details/${this.car.id}/edit`) {
           this.isEdit = true;

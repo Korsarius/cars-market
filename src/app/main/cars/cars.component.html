@@ -53,7 +53,7 @@
         (click)="selectCar(car)"
       >
         <h3>{{ car.model }}</h3>
-        <p>{{ car.brand }}</p>
+        <p>{{ car.brand | titlecase}}</p>
       </mat-list-option>
     </mat-selection-list>
   </div>
@@ -72,6 +72,7 @@
     class="card"
     *ngFor="let car of filteredCars.length === 0 ? trimmedCars : filteredCars"
     [car]="car"
+    [dealers]="dealers"
     (likedCar)="likeOrDislikeCar(car)"
   ></app-card>
 </section>

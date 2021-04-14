@@ -1,6 +1,6 @@
-import { delay, takeWhile } from 'rxjs/operators';
+import { delay, takeWhile, tap } from 'rxjs/operators';
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -17,6 +17,8 @@ import { DealersService } from '../dealers/dealers.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  @Input() dealers: IDealer[];
+
   cars: ICar[] | null = new Array<ICar>();
   newCars: ICar[] = new Array<ICar>();
   likedCar: ICar;
@@ -24,6 +26,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   dealerDialogValue: IDealer;
   newDealers: IDealer[] = new Array<IDealer>();
   loaded: boolean = false;
+  newDealersLoaded: boolean = false;
   isAlive: boolean = true;
 
   constructor(
@@ -33,6 +36,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.dealerService
+      .getDealers()
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe((dealers) => (this.dealers = dealers));
     this.getCars();
     this.getDealers();
   }
@@ -49,16 +56,28 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.likedCar = cars.find((car: ICar) => car.liked);
         this.cars = cars.filter((car: ICar) => car.liked);
         this.newCars = cars.filter((car: ICar) => car.newItem);
+        this.dealers
+          ? this.cars.forEach((car) => {
+              const dealer: IDealer = this.dealers.find(
+                (item) => item.id === car.brand
+              );
+              dealer ? (car.brand = dealer.name) : '';
+            })
+          : '';
       });
   }
 
   getDealers(): void {
     this.dealerService
       .getDealers()
-      .pipe(takeWhile(() => this.isAlive))
+      .pipe(
+        takeWhile(() => this.isAlive),
+        delay(500)
+      )
       .subscribe(
         (dealers) =>
-          (this.newDealers = dealers.filter((dealer) => dealer.newRecord))
+          (this.newDealers = dealers.filter((dealer) => dealer.newRecord)) &&
+          (this.newDealersLoaded = true)
       );
   }
 

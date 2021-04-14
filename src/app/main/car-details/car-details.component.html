@@ -24,7 +24,7 @@
     </div>
     <ul class="car-properties" *ngIf="!isEdit">
       <li>
-        Dealers: <span>{{ car.brand }}</span>
+        Dealer: <span>{{ car.brand }}</span>
       </li>
       <li *ngIf="car.class">
         Class: <span>{{ car.class }}</span>
@@ -43,8 +43,16 @@
       </li>
     </ul>
   </div>
-  <app-car-form *ngIf="isEdit" [car]="car" [dealers]="dealers$ | async" (isEdit)="isEdit = $event" (updatedCar)="car = $event"></app-car-form>
+  <app-car-form
+    *ngIf="isEdit"
+    [car]="car"
+    [dealers]="dealers$ | async"
+    (isEdit)="isEdit = $event"
+    (updatedCar)="car = $event"
+  ></app-car-form>
 </div>
 <div *ngIf="isCarDetails" class="go-back-btn-wrapper">
-  <button mat-flat-button color="primary" (click)="router.navigate(['cars'])">Come back to Cars</button>
+  <button mat-flat-button color="primary" (click)="router.navigate(['cars'])">
+    Come back to Cars
+  </button>
 </div>

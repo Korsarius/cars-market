@@ -10,7 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class MainComponent implements OnInit {
   id: number;
-  defaultLink: HTMLElement;
+  defaultLink: HTMLAnchorElement;
+  allLinks: NodeListOf<HTMLAnchorElement>;
   activeLink: HTMLElement;
   private routeSubscription: Subscription;
 

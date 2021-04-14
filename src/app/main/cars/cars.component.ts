@@ -1,4 +1,5 @@
-import { debounceTime, delay, takeWhile } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { debounceTime, delay, takeWhile, tap } from 'rxjs/operators';
 
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -6,7 +7,9 @@ import { FormControl } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
 import { ICar } from './ICar';
+import { IDealer } from './../dealers/IDealer';
 import { CarsService } from './cars.service';
+import { DealersService } from './../dealers/dealers.service';
 
 @Component({
   selector: 'app-cars',
@@ -15,8 +18,9 @@ import { CarsService } from './cars.service';
 })
 export class CarsComponent implements OnInit, OnDestroy {
   @Input() car?: ICar;
-
+  
   cars: ICar[] = new Array<ICar>();
+  dealers: IDealer[];
   trimmedCars: ICar[] = new Array<ICar>();
   filteredCars: ICar[] = new Array<ICar>();
   categoryView: boolean = false;
@@ -32,9 +36,16 @@ export class CarsComponent implements OnInit, OnDestroy {
   filterControl: FormControl = new FormControl();
   shownButtons: boolean = false;
 
-  constructor(private carService: CarsService) {}
+  constructor(
+    private carService: CarsService,
+    private dealerService: DealersService
+  ) {}
 
   ngOnInit(): void {
+    this.dealerService
+      .getDealers()
+      .pipe(takeWhile(() => this.alive))
+      .subscribe((dealers) => (this.dealers = dealers));
     this.handleFilter();
     this.getCars();
   }
@@ -82,6 +93,14 @@ export class CarsComponent implements OnInit, OnDestroy {
       .subscribe((cars) => {
         this.loaded = true;
         this.cars = cars;
+        this.dealers
+          ? this.cars.forEach((car) => {
+              const dealer: IDealer = this.dealers.find(
+                (item) => item.id === car.brand
+              );
+              dealer ? (car.brand = dealer.name) : '';
+            })
+          : '';
         this.trimmedCars = this.cars.slice(this.startIndex, 8);
         this.cars.forEach((item) =>
           item.category

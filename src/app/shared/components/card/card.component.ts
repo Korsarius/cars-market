@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { ICar } from './../../../main/cars/ICar';
 import { IDealer } from './../../../main/dealers/IDealer';
-import { DealersService } from './../../../main/dealers/dealers.service';
 
 @Component({
   selector: 'app-card',
@@ -11,16 +10,13 @@ import { DealersService } from './../../../main/dealers/dealers.service';
 })
 export class CardComponent implements OnInit {
   @Input() car: ICar;
+  @Input() dealers: IDealer[];
   @Input() showButtons: boolean = true;
   @Output() likedCar: EventEmitter<ICar> = new EventEmitter<ICar>();
 
-  dealers: IDealer[];
+  constructor() {}
 
-  constructor(private dealerService: DealersService) {}
-
-  ngOnInit(): void {
-    this.dealerService.getDealers().subscribe((dealers) => this.dealers = dealers);
-  }
+  ngOnInit(): void {}
 
   changeCar(car: ICar): void {
     this.likedCar.emit(car);

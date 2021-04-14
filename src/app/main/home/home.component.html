@@ -8,7 +8,7 @@
       <mat-spinner *ngIf="!loaded" class="spinner"></mat-spinner>
       <div *ngFor="let car of cars">
         <div *ngIf="car.liked" [ngClass]="{ 'small-card': car.liked }">
-          <app-card class="card" [car]="car" [showButtons]="false"></app-card>
+          <app-card class="card" [car]="car" [dealers]="dealers" [showButtons]="false"></app-card>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@
   </section>
   <section class="my-dealers">
     <h4>My Dealers</h4>
-    <p class="default-text" *ngIf="!newDealers.length && loaded">
+    <p class="default-text" *ngIf="!newDealers.length && newDealersLoaded">
       You haven't added any dealers yet.
     </p>
     <mat-list *ngIf="newDealers.length" #dealersList role="list">
@@ -57,7 +57,7 @@
         </mat-list-item-content>
       </mat-list-item>
     </mat-list>
-    <mat-spinner *ngIf="!loaded" class="spinner my-dealers-spinner"></mat-spinner>
+    <mat-spinner *ngIf="!newDealers || !newDealersLoaded" class="spinner my-dealers-spinner"></mat-spinner>
   </section>
   <section class="actions">
     <button mat-raised-button color="accent" (click)="openCarDialog()">

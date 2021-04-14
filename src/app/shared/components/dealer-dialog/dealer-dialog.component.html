@@ -47,7 +47,7 @@
     <button mat-button class="cancel-btn" (click)="close()">Cancel</button>
     <button
       mat-button
-      [disabled]="!dealer.id || !dealer.name"
+      [disabled]="!dealer.id || !dealer.name || shownError"
       (click)="saveDealer()"
     >
       Save

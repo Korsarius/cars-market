@@ -39,6 +39,7 @@ export class CarFormComponent implements OnInit, OnDestroy {
   addCarForm: FormGroup;
 
   cars: ICar[] = new Array<ICar>();
+  dealer: IDealer;
   shownError: boolean = false;
   shownWarning: boolean = false;
   // For style (adding class)
@@ -58,7 +59,6 @@ export class CarFormComponent implements OnInit, OnDestroy {
       .getCars()
       .pipe(takeWhile(() => this.alive))
       .subscribe((cars) => (this.cars = cars));
-
     this.addCarForm = new FormGroup({
       model: new FormControl(
         this.car ? this.car.model : '',
