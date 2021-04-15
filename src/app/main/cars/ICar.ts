@@ -9,4 +9,7 @@ export interface ICar {
   image?: string;
   liked: boolean;
   newItem: boolean;
+  transmission?: string;
+  description?: string;
+  creationDate?: Date | string;
 }

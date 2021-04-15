@@ -1,0 +1,12 @@
+.confirm-wrapper {
+  min-width: 300px;
+  p {
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+
+  .confirm-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+}

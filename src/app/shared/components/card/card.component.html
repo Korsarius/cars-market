@@ -1,4 +1,3 @@
-<!-- *ngFor="let car of foundCars.length === 0 ? slicedCars : foundCars" -->
 <mat-card id="card-wrapper" class="card-wrapper">
   <mat-card-header class="card-header">
     <mat-card-title>{{ car.model }}</mat-card-title>
@@ -8,7 +7,7 @@
       mat-icon-button
       color="warn"
       aria-label="heart icon"
-      (click)="likeCar(car)"
+      (click)="changeCar(car)"
     >
       <mat-icon>favorite</mat-icon>
     </button>
@@ -22,9 +21,11 @@
     />
   </mat-card-content>
   <mat-card-actions class="card-actions" *ngIf="showButtons">
-    <button class="card-actions-link like" (click)="likeCar(car)">
-      {{ !car.liked ? "Like" : "Dislake" }}
+    <button class="card-actions-link like" (click)="changeCar(car)">
+      {{ !car.liked ? "Like" : "Dislike" }}
     </button>
-    <button class="card-actions-link details">Details</button>
+    <button class="card-actions-link details">
+      <a routerLink="details/{{ car.id }}">Details</a>
+    </button>
   </mat-card-actions>
 </mat-card>

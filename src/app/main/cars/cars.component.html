@@ -3,8 +3,22 @@
   <form class="search-form" *ngIf="!categoryView">
     <mat-form-field class="filter-field">
       <mat-label>Filter by car brand or model</mat-label>
-      <input matInput placeholder="Ex. Ford" [formControl]="filterControl" />
-      <!-- (focus)="foundCars.length === 0 ? filterInput.style.backgroundColor = 'red' && filterInput.value = 'Not Found Any Car' : ''" -->
+      <input
+        matInput
+        #filterInput
+        placeholder="Ex. Ford"
+        [formControl]="filterControl"
+        />
+      <button
+        mat-button
+        *ngIf="filterInput.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="clearFilter(); filterInput.value = ''"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
     </mat-form-field>
   </form>
   <div>
@@ -37,20 +51,29 @@
         *ngFor="let car of selectedCarsOnCategory; let i = index"
         [selected]="car && i == 0"
         (click)="selectCar(car)"
-        >
+      >
         <h3>{{ car.model }}</h3>
-        <p>{{ car.brand }}</p>
+        <p>{{ car.brand | titlecase}}</p>
       </mat-list-option>
     </mat-selection-list>
   </div>
-  <app-car-details [car]="selectedCar"></app-car-details>
+  <app-car-details
+    [carDetailsPage]="shownButtons"
+    [car]="selectedCar"
+  ></app-car-details>
 </section>
 <!-- If toggle === false -->
-<section class="cars" *ngIf="!categoryView">
+<div *ngIf="notFound" class="not-found">
+  <span><strong>Cars Not Found</strong></span>
+</div>
+<section class="cars" *ngIf="!categoryView && !notFound">
+  <mat-spinner *ngIf="!loaded" class="spinner"></mat-spinner>
   <app-card
     class="card"
     *ngFor="let car of filteredCars.length === 0 ? trimmedCars : filteredCars"
     [car]="car"
+    [dealers]="dealers"
+    (likedCar)="likeOrDislikeCar(car)"
   ></app-card>
 </section>
 <div class="load-more" *ngIf="!categoryView">
@@ -58,7 +81,7 @@
     class="load-more-btn"
     mat-raised-button
     color="accent"
-    *ngIf="filteredCars.length === 0"
+    *ngIf="trimmedCars.length > 7 && !notFound"
     (click)="cars.length !== trimmedCars.length ? loadMore() : rollUp()"
   >
     {{ cars.length === trimmedCars.length ? "Roll Up" : "Load More" }}

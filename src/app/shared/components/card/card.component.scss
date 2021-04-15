@@ -1,9 +1,9 @@
-@import '../../../../styles/colors.scss';
+@import "../../../../styles/colors.scss";
 
 .card-wrapper {
-  // height: 265px;
   margin-bottom: 20px;
 }
+
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -36,7 +36,10 @@
     color: $txt-c-lightpurple;
   }
   .details {
-    color: $txt-c-lightyellow;
+    a {
+      text-decoration: none;
+      color: $txt-c-lightyellow;
+    }
   }
 }
 
@@ -44,6 +47,6 @@
   font-size: 16px;
 }
 
-.mat-card>.mat-card-actions:last-child{
+.mat-card > .mat-card-actions:last-child {
   margin-bottom: 0;
 }

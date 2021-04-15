@@ -1,0 +1,119 @@
+<form [formGroup]="addCarForm" class="car-dialog">
+  <mat-form-field class="full-width">
+    <mat-label>Model *</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="model"
+      placeholder="Ex. Camaro"
+    />
+    <mat-error *ngIf="addCarForm.controls.model.hasError('required')">
+      Model is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Dealer *</mat-label>
+    <input
+      type="text"
+      matInput
+      #dealerInput
+      formControlName="dealer"
+      placeholder="Ex. Chevrolet"
+      [matAutocomplete]="auto"
+    />
+    <mat-error *ngIf="addCarForm.controls.dealer.hasError('required')">
+      Dealer is <strong>required</strong>
+    </mat-error>
+    <mat-hint *ngIf="shownError" class="error">
+      There is no such <strong>dealer</strong>
+    </mat-hint>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selectDealer($event)"
+    >
+      <mat-option
+        *ngFor="let option of dealers"
+        [value]="option || option.name"
+      >
+        {{ option.name | titlecase}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Class</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="class"
+      placeholder="Ex. muscle car"
+    />
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Category</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="category"
+      placeholder="Ex. sedan"
+    />
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Year</mat-label>
+    <input
+      type="number"
+      matInput
+      formControlName="year"
+      placeholder="Ex. 1967"
+    />
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Color</mat-label>
+    <input type="text" matInput formControlName="color" placeholder="Ex. red" />
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Transmission</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="transmission"
+      placeholder="Ex. mechanics"
+    />
+  </mat-form-field>
+  <mat-form-field class="example-full-width" [ngClass]="{'car-description-div-edit' : editForm}">
+    <mat-label>Description</mat-label>
+    <textarea
+      class="car-description"
+      [ngClass]="{'car-description-edit' : editForm}"
+      matInput
+      formControlName="description"
+      placeholder="Some information about the car"
+    ></textarea>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Image</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="image"
+      placeholder="Enter image url"
+    />
+    <mat-hint *ngIf="shownWarning" class="warning">
+      Incorrect image <strong>url</strong>
+      <p>Need something like this: <i>https://i.infocar.ua/i/12/5128/700x350.jpg</i></p>
+    </mat-hint>
+  </mat-form-field>
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-button class="cancel-btn" (click)="close()">Cancel</button>
+    <button
+      mat-button
+      [disabled]="
+        shownError ||
+        addCarForm.controls.model.hasError('required') ||
+        addCarForm.controls.dealer.hasError('required')
+      "
+      (click)="saveCar(car)"
+    >
+      Save
+    </button>
+  </div>
+</form>

@@ -1,0 +1,56 @@
+<div class="dealer-dialog">
+  <h1 mat-dialog-title>
+    {{ isEdit ? "Edit Dealer" : "Add Dealer" }}
+  </h1>
+  <div mat-dialog-content>
+    <div class="dealer-form">
+      <div class="validId">
+        <mat-form-field class="full-width">
+          <mat-label>Id *</mat-label>
+          <input
+            type="text"
+            matInput
+            [disabled]="isEdit"
+            (keyup)="!isEdit && check()"
+            [(ngModel)]="dealer.id"
+          />
+          <mat-hint class="error" *ngIf="dealer.id === '' || dealer.id === null"
+            >Id is <strong>required</strong></mat-hint
+          >
+          <mat-hint *ngIf="shownError" class="error">
+            The id is already <strong>taken</strong>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <mat-form-field class="full-width">
+        <mat-label>Name *</mat-label>
+        <input type="text" matInput #nameInput [(ngModel)]="dealer.name" />
+        <mat-hint class="error" *ngIf="!dealer.name"
+          >Name is <strong>required</strong></mat-hint
+        >
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Headquarters</mat-label>
+        <input type="text" matInput [(ngModel)]="dealer.headquarters" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Country</mat-label>
+        <input type="text" matInput [(ngModel)]="dealer.country" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Founded in</mat-label>
+        <input type="number" matInput [(ngModel)]="dealer.foundedIn" />
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-button class="cancel-btn" (click)="close()">Cancel</button>
+    <button
+      mat-button
+      [disabled]="!dealer.id || !dealer.name || shownError"
+      (click)="saveDealer()"
+    >
+      Save
+    </button>
+  </div>
+</div>

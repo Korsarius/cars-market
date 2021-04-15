@@ -1,19 +1,22 @@
+@import "../../../styles/colors.scss";
+
 .car-details-wrapper {
   display: flex;
   margin-left: 15px;
 }
 
 .selected-car {
-  width: 800px;
+  width: 600px;
+  margin-right: 15px;
   .selected-car-img {
     width: 100%;
-    height: 400px;
+    height: 375px;
     object-fit: cover;
   }
 }
 
 .selected-car-info {
-  margin-left: 15px;
+  width: 470px;
   .car-properties {
     list-style-type: none;
     padding: 0;
@@ -24,6 +27,67 @@
       span {
         font-weight: bold;
       }
+      .car-description {
+        padding: 10px;
+        border: 2px solid #c5c5c5;
+      }
     }
   }
+}
+
+.details-main {
+  margin: 85px 0 0 120px;
+  .selected-car {
+    .selected-car-img {
+      height: 300px;
+    }
+  }
+  .selected-car-info {
+    width: 50%;
+    margin-right: 0;
+    .car-info-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      h3 {
+        margin-bottom: 0;
+      }
+      button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+      }
+      button:hover {
+        color: $bc-purple;
+      }
+      button + button {
+        margin-left: 12px;
+      }
+    }
+    .car-properties {
+      margin-bottom: 0;
+      li {
+        .car-description {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+.go-back-btn-wrapper {
+  position: absolute;
+  left: 45%;
+  bottom: 0;
+  margin-bottom: 15px;
+  button:hover {
+    color: $txt-c-lightpurple;
+    background-color: $bc-white;
+    border: 1px solid $b-c-purple;
+  }
+}
+
+.spinner {
+  margin: 100px 0 0 120px;
 }

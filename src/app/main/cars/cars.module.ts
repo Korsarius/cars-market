@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { CarsService } from './cars.service';
 import { CarsComponent } from './cars.component';
@@ -26,6 +27,7 @@ import { CarDetailsModule } from './../car-details/car-details.module';
     MatInputModule,
     MatSlideToggleModule,
     MatListModule,
+    MatProgressSpinnerModule,
     CardModule,
     CarDetailsModule,
     MatTabsModule,

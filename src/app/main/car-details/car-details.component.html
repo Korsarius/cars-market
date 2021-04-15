@@ -1,4 +1,5 @@
-<div class="car-details-wrapper">
+<mat-spinner *ngIf="!isLoaded && carDetailsPage" class="spinner"></mat-spinner>
+<div class="car-details-wrapper" [ngClass]="{ 'details-main': carDetailsPage }">
   <div class="selected-car" *ngIf="car">
     <img
       ngDefaultControl
@@ -7,21 +8,51 @@
       alt="selected-car-img"
     />
   </div>
-  <div class="selected-car-info" *ngIf="car">
-    <h3>{{ car.model }}</h3>
-    <ul class="car-properties">
+  <div class="selected-car-info" *ngIf="car && !isEdit">
+    <div class="car-info-header">
+      <h3 *ngIf="!isEdit">{{ car.model }}</h3>
+      <div *ngIf="carDetailsPage">
+        <button class="edit-btn" (click)="openEditForm()">
+          <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+        </button>
+        <button class="delete-btn" (click)="openConfirmDialog(car)">
+          <mat-icon aria-hidden="false" aria-label="delete icon"
+            >delete</mat-icon
+          >
+        </button>
+      </div>
+    </div>
+    <ul class="car-properties" *ngIf="!isEdit">
       <li>
-        Dealers: <span>{{ car.brand }}</span>
+        Dealer: <span>{{ car.brand | titlecase}}</span>
       </li>
-      <li>
+      <li *ngIf="car.class">
         Class: <span>{{ car.class }}</span>
       </li>
-      <li>
+      <li *ngIf="car.year">
         Year: <span>{{ car.year }}</span>
       </li>
-      <li>
+      <li *ngIf="car.color">
         Color: <span>{{ car.color }}</span>
+      </li>
+      <li *ngIf="car.transmission">
+        Transmisson: <span>{{ car.transmission }}</span>
+      </li>
+      <li *ngIf="car.description">
+        <p class="car-description">{{ car.description }}</p>
       </li>
     </ul>
   </div>
+  <app-car-form
+    *ngIf="isEdit"
+    [car]="car"
+    [dealers]="dealers$ | async"
+    (isEdit)="isEdit = $event"
+    (updatedCar)="car = $event"
+  ></app-car-form>
+</div>
+<div *ngIf="isCarDetails" class="go-back-btn-wrapper">
+  <button mat-flat-button color="primary" (click)="router.navigate(['cars'])">
+    Come back to Cars
+  </button>
 </div>

@@ -7,6 +7,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 
 import { CardComponent } from './card.component';
+import { MainRoutingModule } from '../../../main/main-routing.module';
+import { AppRoutingModule } from '../../../app-routing.module';
+import { CarDetailsModule } from '../../../main/car-details/car-details.module';
 
 @NgModule({
   declarations: [CardComponent],
@@ -16,6 +19,8 @@ import { CardComponent } from './card.component';
     MatIconModule,
     MatButtonModule,
     MatInputModule,
+    MainRoutingModule,
+    CarDetailsModule,
   ],
   exports: [CardComponent],
 })

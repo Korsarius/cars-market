@@ -1,0 +1,35 @@
+@import "../../../../styles/colors.scss";
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+  }
+}
+
+.car-description {
+  height: 40px;
+  width: 400px;
+  margin-bottom: 10px;
+}
+
+.car-description-edit {
+  height: 60px;
+  width: 600px;
+}
+
+.car-description-div-edit {
+  width: 600px;
+}
+
+.error {
+  color: $txt-c-red;
+}
+
+.warning {
+  color: $txt-c-lightyellow;
+}
